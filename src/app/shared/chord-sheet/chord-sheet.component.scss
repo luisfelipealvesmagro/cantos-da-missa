@@ -1,0 +1,22 @@
+.sheet {
+  font-family: var(--font-mono);
+  line-height: 1.35;
+  white-space: pre-wrap;
+}
+.line { display: flex; flex-wrap: wrap; margin-bottom: .55em; }
+.seg { display: inline-flex; flex-direction: column; white-space: pre; }
+.chord {
+  color: var(--accent-2);
+  font-weight: 500;
+  min-height: 1.25em;
+  letter-spacing: .02em;
+}
+.text { color: var(--text); }
+.label {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--primary-2);
+  margin: .6em 0 .25em;
+  font-size: 1.05em;
+}
+.blank { height: .8em; }

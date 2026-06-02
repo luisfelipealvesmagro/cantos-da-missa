@@ -1,0 +1,35 @@
+<div class="head">
+  <a routerLink="/" class="back" aria-label="Voltar"><app-icon name="arrow_back" [size]="24" /></a>
+  <h2>{{ category()?.name ?? 'Categoria' }}</h2>
+</div>
+
+<div class="search">
+  <app-icon name="search" [size]="20" />
+  <input type="text" placeholder="Buscar música ou autor…"
+         [value]="query()" (input)="query.set($any($event.target).value)" />
+</div>
+
+@if (filtered().length) {
+  <ul class="list">
+    @for (song of filtered(); track song.id) {
+      <li>
+        <a [routerLink]="['/musica', song.id]">
+          <span class="info">
+            <span class="t">{{ song.title }}</span>
+            <span class="meta">
+              Tom: {{ song.originalKey }}{{ song.capo ? ' · capo ' + song.capo : '' }}
+              {{ song.author ? ' · ' + song.author : '' }}
+            </span>
+          </span>
+          <app-icon name="chevron_right" [size]="22" class="chev" />
+        </a>
+      </li>
+    }
+  </ul>
+} @else {
+  <p class="empty">Nenhuma música ainda. Que tal cadastrar a primeira?</p>
+}
+
+<a class="add" [routerLink]="['/musica/nova', categoryId()]">
+  <app-icon name="add" [size]="20" /> Cadastrar cifra
+</a>

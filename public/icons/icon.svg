@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="80" fill="#3C3489"/>
+  <!-- Note head -->
+  <ellipse cx="228" cy="350" rx="65" ry="44" transform="rotate(-18 228 350)" fill="#EF9F27"/>
+  <!-- Stem = vertical bar of the cross -->
+  <rect x="281" y="108" width="16" height="246" rx="5" fill="#EF9F27"/>
+  <!-- Cross horizontal bar -->
+  <rect x="212" y="180" width="144" height="20" rx="5" fill="#EF9F27"/>
+</svg>

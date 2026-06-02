@@ -1,0 +1,21 @@
+.topbar {
+  background: var(--primary);
+  color: var(--on-primary);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: var(--shadow);
+  padding-top: env(safe-area-inset-top);
+}
+.bar { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.cross { color: var(--accent-2); }
+.title { font-family: var(--font-display); font-size: 22px; font-weight: 500; }
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 42px; height: 42px; border-radius: 50%;
+  color: var(--on-primary-2);
+  transition: background .15s ease;
+}
+.theme-toggle:hover { background: rgba(255, 255, 255, .1); }
+main { padding: 18px 16px 80px; }

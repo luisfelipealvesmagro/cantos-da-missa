@@ -1,0 +1,60 @@
+<section class="intro">
+  <p class="verse">"Cantai ao Senhor um cântico novo." <span>— Sl 96</span></p>
+  <div class="actions-top">
+    <button class="btn btn-ghost" (click)="manage.set(!manage())">
+      <app-icon [name]="manage() ? 'done' : 'tune'" [size]="20" />
+      {{ manage() ? 'Concluir' : 'Gerenciar' }}
+    </button>
+  </div>
+</section>
+
+<div class="grid">
+  @for (cat of categories(); track cat.id) {
+    <div class="cat-card">
+      <a class="cat-link" [routerLink]="['/categoria', cat.id]">
+        <span class="cat-icon"><app-icon [name]="cat.icon" [size]="24" /></span>
+        <span class="cat-body">
+          <span class="cat-name">{{ cat.name }}</span>
+          <span class="cat-count">{{ counts()[cat.id!] ?? 0 }} {{ (counts()[cat.id!] ?? 0) === 1 ? 'música' : 'músicas' }}</span>
+        </span>
+        @if (!manage()) { <app-icon name="chevron_right" [size]="22" class="chev" /> }
+      </a>
+      @if (manage()) {
+        <button class="del" (click)="deleteCategory(cat.id!, cat.name)" aria-label="Excluir categoria">
+          <app-icon name="delete" [size]="20" />
+        </button>
+      }
+    </div>
+  }
+</div>
+
+@if (adding()) {
+  <div class="add-form">
+    <input type="text" placeholder="Nome da categoria"
+           [value]="newName()" (input)="newName.set($any($event.target).value)"
+           (keyup.enter)="saveCategory()" />
+    <div class="icon-picker">
+      @for (ic of iconOptions; track ic) {
+        <button class="icon-opt" [class.sel]="newIcon() === ic" (click)="newIcon.set(ic)" [attr.aria-label]="ic">
+          <app-icon [name]="ic" [size]="22" />
+        </button>
+      }
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" (click)="adding.set(false)">Cancelar</button>
+      <button class="btn btn-primary" (click)="saveCategory()">Salvar</button>
+    </div>
+  </div>
+} @else {
+  <button class="add-cat" (click)="adding.set(true)">
+    <app-icon name="add" [size]="20" /> Nova categoria
+  </button>
+}
+
+<footer class="backup">
+  <button class="btn btn-ghost" (click)="exportData()"><app-icon name="download" [size]="20" /> Exportar backup</button>
+  <label class="btn btn-ghost">
+    <app-icon name="upload" [size]="20" /> Importar backup
+    <input type="file" accept="application/json" hidden (change)="onImport($event)" />
+  </label>
+</footer>

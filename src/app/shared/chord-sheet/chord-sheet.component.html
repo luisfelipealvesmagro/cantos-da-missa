@@ -1,0 +1,18 @@
+<div class="sheet" [style.font-size.em]="fontScale()">
+  @for (line of displayLines(); track $index) {
+    @switch (line.type) {
+      @case ('blank') { <div class="blank"></div> }
+      @case ('label') { <div class="label">{{ line.label }}</div> }
+      @case ('lyric') {
+        <div class="line">
+          @for (seg of line.segments; track $index) {
+            <span class="seg">
+              <span class="chord">{{ seg.chord }}</span>
+              <span class="text">{{ seg.text }}</span>
+            </span>
+          }
+        </div>
+      }
+    }
+  }
+</div>

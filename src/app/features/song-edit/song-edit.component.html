@@ -1,0 +1,59 @@
+<div class="head">
+  <button class="back" (click)="cancel()" aria-label="Voltar"><app-icon name="arrow_back" [size]="24" /></button>
+  <h2>{{ isEdit() ? 'Editar cifra' : 'Nova cifra' }}</h2>
+</div>
+
+<div class="form">
+  <label>Título
+    <input type="text" [value]="title()" (input)="title.set($any($event.target).value)" placeholder="Nome da música" />
+  </label>
+
+  <div class="row">
+    <label>Categoria
+      <select [value]="categoryId()" (change)="categoryId.set(+$any($event.target).value)">
+        <option [value]="null" disabled>Selecione…</option>
+        @for (c of categories(); track c.id) { <option [value]="c.id">{{ c.name }}</option> }
+      </select>
+    </label>
+    <label>Autor
+      <input type="text" [value]="author()" (input)="author.set($any($event.target).value)" placeholder="opcional" />
+    </label>
+  </div>
+
+  <div class="row">
+    <label>Tom original
+      <select [value]="originalKey()" (change)="originalKey.set($any($event.target).value)">
+        @for (k of keys; track k) { <option [value]="k">{{ k }}</option> }
+      </select>
+    </label>
+    <label>Capotraste
+      <input type="number" min="0" max="11" [value]="capo()" (input)="capo.set(+$any($event.target).value)" />
+    </label>
+  </div>
+
+  <label class="body-label">
+    <span class="body-head">
+      Cifra (formato ChordPro)
+      <button class="btn btn-ghost mini" (click)="convertPasted()" title="Converte texto com acordes em cima da letra">
+        <app-icon name="auto_fix_high" [size]="18" /> Converter colado
+      </button>
+    </span>
+    <textarea rows="12" [value]="body()" (input)="body.set($any($event.target).value)"
+      placeholder="Use [Acorde] dentro da letra, ex.:&#10;[D]Eis-me a[G]qui Senhor&#10;&#10;Ou cole no formato com acordes em cima da letra e toque em 'Converter colado'."></textarea>
+    <small>Dica: <code>[G]</code> antes da sílaba; <code>&#123;c: Refrão&#125;</code> cria um título de seção.</small>
+  </label>
+
+  @if (showPreview() && body().trim()) {
+    <div class="preview">
+      <span class="preview-tag">Pré-visualização</span>
+      <app-chord-sheet [body]="body()" [transposeSteps]="0" [capo]="0" [fontScale]="1" />
+    </div>
+  }
+
+  <div class="actions">
+    <button class="btn btn-ghost" (click)="cancel()">Cancelar</button>
+    <button class="btn btn-primary" [disabled]="!canSave()" (click)="save()">
+      <app-icon name="check" [size]="20" /> Salvar
+    </button>
+  </div>
+</div>
