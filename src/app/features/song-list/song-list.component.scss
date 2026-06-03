@@ -61,6 +61,6 @@ h2 { font-size: 24px; }
 .add {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   margin-top: 16px; padding: 14px;
-  border: 1px dashed var(--accent); border-radius: var(--radius);
-  color: var(--accent-2); font-weight: 500;
+  border: 1px dashed var(--primary-2); border-radius: var(--radius);
+  color: var(--primary-2); font-weight: 500;
 }

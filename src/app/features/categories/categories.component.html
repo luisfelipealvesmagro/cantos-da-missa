@@ -11,7 +11,8 @@
 <div class="grid">
   @for (cat of categories(); track cat.id) {
     <div class="cat-card">
-      <a class="cat-link" [routerLink]="['/categoria', cat.id]">
+      <a class="cat-link" [routerLink]="manage() ? null : ['/categoria', cat.id]"
+         [class.no-nav]="manage()">
         <span class="cat-icon"><app-icon [name]="cat.icon" [size]="24" /></span>
         <span class="cat-body">
           <span class="cat-name">{{ cat.name }}</span>
@@ -20,11 +21,32 @@
         @if (!manage()) { <app-icon name="chevron_right" [size]="22" class="chev" /> }
       </a>
       @if (manage()) {
-        <button class="del" (click)="deleteCategory(cat.id!, cat.name)" aria-label="Excluir categoria">
+        <button class="edit-btn" (click)="startEdit(cat)" [attr.aria-label]="'Editar ' + cat.name">
+          <app-icon name="edit" [size]="18" />
+        </button>
+        <button class="del" (click)="deleteCategory(cat.id!, cat.name)" [attr.aria-label]="'Excluir ' + cat.name">
           <app-icon name="delete" [size]="20" />
         </button>
       }
     </div>
+    @if (editingId() === cat.id) {
+      <div class="edit-form">
+        <input type="text" placeholder="Nome da categoria"
+               [value]="editName()" (input)="editName.set($any($event.target).value)"
+               (keyup.enter)="saveEdit()" />
+        <div class="icon-picker">
+          @for (ic of iconOptions; track ic) {
+            <button class="icon-opt" [class.sel]="editIcon() === ic" (click)="editIcon.set(ic)" [attr.aria-label]="ic">
+              <app-icon [name]="ic" [size]="22" />
+            </button>
+          }
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-ghost" (click)="cancelEdit()">Cancelar</button>
+          <button class="btn btn-primary" (click)="saveEdit()">Salvar</button>
+        </div>
+      </div>
+    }
   }
 </div>
 

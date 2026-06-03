@@ -17,7 +17,7 @@ h2 { font-size: 24px; line-height: 1.2; }
 .btn-icon { width: 36px; height: 36px; }
 .btn-icon.active { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
 .scroll { flex: 1; min-width: 160px; }
-.speed { flex: 1; width: auto; }
+.speed { flex: 1; width: auto; accent-color: var(--primary-2); }
 
 .bottom { margin-top: 36px; display: flex; justify-content: center; }
 .loading { color: var(--text-muted); text-align: center; padding: 40px 0; }

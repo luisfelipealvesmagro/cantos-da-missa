@@ -5,6 +5,7 @@ import { CategoryService } from '../../core/services/category.service';
 import { SongService } from '../../core/services/song.service';
 import { BackupService } from '../../core/services/backup.service';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { Category } from '../../core/models/category.model';
 
 @Component({
   selector: 'app-categories',
@@ -31,8 +32,13 @@ export class CategoriesComponent {
   adding = signal(false);
   newName = signal('');
   newIcon = signal('music_note');
-  iconOptions = ['music_note', 'church', 'star', 'favorite', 'self_improvement',
-    'auto_awesome', 'menu_book', 'redeem', 'bakery_dining', 'waving_hand', 'celebration', 'spa'];
+  iconOptions = ['music_note', 'chalice', 'church', 'star', 'favorite',
+    'self_improvement', 'auto_awesome', 'menu_book', 'redeem', 'bakery_dining',
+    'waving_hand', 'celebration', 'spa'];
+
+  editingId = signal<number | null>(null);
+  editName = signal('');
+  editIcon = signal('music_note');
 
   async saveCategory() {
     const name = this.newName().trim();
@@ -43,8 +49,24 @@ export class CategoriesComponent {
     this.adding.set(false);
   }
 
+  startEdit(cat: Category) {
+    this.editingId.set(cat.id!);
+    this.editName.set(cat.name);
+    this.editIcon.set(cat.icon);
+  }
+
+  async saveEdit() {
+    const name = this.editName().trim();
+    if (!name || this.editingId() === null) return;
+    await this.categoryService.update(this.editingId()!, { name, icon: this.editIcon() });
+    this.editingId.set(null);
+  }
+
+  cancelEdit() { this.editingId.set(null); }
+
   async deleteCategory(id: number, name: string) {
     if (confirm(`Excluir "${name}" e todas as suas cifras?`)) {
+      if (this.editingId() === id) this.editingId.set(null);
       await this.categoryService.remove(id);
     }
   }
