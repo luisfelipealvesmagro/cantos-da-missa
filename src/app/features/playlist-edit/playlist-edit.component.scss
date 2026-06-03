@@ -1,0 +1,67 @@
+.head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.back { display: inline-flex; align-items: center; color: var(--text-muted); }
+
+.form { display: flex; flex-direction: column; gap: 24px; }
+
+.section h3 {
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 500;
+  margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+}
+.badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--primary-2); color: var(--on-primary); border-radius: 20px;
+  font-size: 0.75rem; font-family: var(--font-body); padding: 1px 8px;
+}
+
+.hint-empty { color: var(--text-muted); font-size: 0.9rem; }
+
+/* Selected songs */
+.selected-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.selected-item {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+.pos { font-size: 0.8rem; color: var(--text-muted); width: 18px; text-align: right; flex-shrink: 0; }
+.song-info { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.song-title { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.song-key { font-size: 0.8rem; color: var(--text-muted); }
+
+.order-btns { display: flex; flex-direction: column; gap: 0; flex-shrink: 0; }
+.order-btns button {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 22px; color: var(--text-muted); border-radius: 4px;
+  &:hover:not(:disabled) { background: var(--surface-2); color: var(--primary-2); }
+  &:disabled { opacity: 0.25; cursor: not-allowed; }
+}
+
+.remove-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%; color: var(--danger);
+  flex-shrink: 0;
+  &:hover { background: var(--surface-2); }
+}
+
+/* Available songs */
+.search {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 8px 12px; margin-bottom: 10px; background: var(--surface);
+  input { border: none; background: transparent; padding: 0; font-size: 15px; }
+  color: var(--text-muted);
+}
+
+.available-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; max-height: 280px; overflow-y: auto; }
+.available-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; border-radius: var(--radius-sm);
+  &:hover { background: var(--surface-2); }
+}
+.add-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  color: var(--primary-2); flex-shrink: 0;
+  &:hover { background: var(--surface-2); }
+}
+
+.footer { display: flex; justify-content: flex-end; gap: 10px; padding-bottom: 40px; }

@@ -1,6 +1,9 @@
 <section class="intro">
   <p class="verse">"Cantai ao Senhor um cântico novo." <span>— Sl 96</span></p>
   <div class="actions-top">
+    <a class="btn btn-ghost" routerLink="/playlists">
+      <app-icon name="queue_music" [size]="20" /> Playlists
+    </a>
     <button class="btn btn-ghost" (click)="manage.set(!manage())">
       <app-icon [name]="manage() ? 'done' : 'tune'" [size]="20" />
       {{ manage() ? 'Concluir' : 'Gerenciar' }}
@@ -21,6 +24,14 @@
         @if (!manage()) { <app-icon name="chevron_right" [size]="22" class="chev" /> }
       </a>
       @if (manage()) {
+        <div class="order-btns">
+          <button (click)="moveUp($index)" [disabled]="$index === 0" aria-label="Mover para cima">
+            <app-icon name="keyboard_arrow_up" [size]="20" />
+          </button>
+          <button (click)="moveDown($index)" [disabled]="$last" aria-label="Mover para baixo">
+            <app-icon name="keyboard_arrow_down" [size]="20" />
+          </button>
+        </div>
         <button class="edit-btn" (click)="startEdit(cat)" [attr.aria-label]="'Editar ' + cat.name">
           <app-icon name="edit" [size]="18" />
         </button>
@@ -73,10 +84,12 @@
   </button>
 }
 
-<footer class="backup">
-  <button class="btn btn-ghost" (click)="exportData()"><app-icon name="download" [size]="20" /> Exportar backup</button>
-  <label class="btn btn-ghost">
-    <app-icon name="upload" [size]="20" /> Importar backup
-    <input type="file" accept="application/json" hidden (change)="onImport($event)" />
-  </label>
-</footer>
+@if (manage()) {
+  <footer class="backup">
+    <button class="btn btn-ghost" (click)="exportData()"><app-icon name="download" [size]="20" /> Exportar backup</button>
+    <label class="btn btn-ghost">
+      <app-icon name="upload" [size]="20" /> Importar backup
+      <input type="file" accept="application/json" hidden (change)="onImport($event)" />
+    </label>
+  </footer>
+}

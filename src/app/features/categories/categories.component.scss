@@ -19,6 +19,16 @@
 .cat-name { font-weight: 500; font-size: 16px; }
 .cat-count { font-size: 13px; color: var(--text-muted); }
 .chev { color: var(--text-muted); }
+.order-btns {
+  display: flex; flex-direction: column;
+  button {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 22px; color: var(--text-muted); border-radius: 4px;
+    &:hover:not(:disabled) { background: var(--surface-2); color: var(--primary-2); }
+    &:disabled { opacity: 0.25; cursor: not-allowed; }
+  }
+}
+
 .edit-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 44px; margin-left: 8px; color: var(--primary-2);

@@ -36,9 +36,14 @@ export class CategoriesComponent implements OnInit {
   adding = signal(false);
   newName = signal('');
   newIcon = signal('music_note');
-  iconOptions = ['music_note', 'chalice', 'church', 'star', 'favorite',
+  iconOptions = [
+    'music_note', 'chalice', 'church', 'star', 'favorite',
     'self_improvement', 'auto_awesome', 'menu_book', 'redeem', 'bakery_dining',
-    'waving_hand', 'celebration', 'spa'];
+    'waving_hand', 'celebration', 'spa',
+    // litúrgicos adicionais
+    'crown', 'water_drop', 'flare', 'wb_sunny', 'brightness_5',
+    'local_fire_department', 'emoji_nature', 'volunteer_activism', 'mode_of_travel',
+  ];
 
   editingId = signal<string | null>(null);
   editName = signal('');
@@ -67,6 +72,22 @@ export class CategoriesComponent implements OnInit {
   }
 
   cancelEdit() { this.editingId.set(null); }
+
+  moveUp(index: number) {
+    const cats = this.categories();
+    if (index === 0) return;
+    const a = cats[index - 1];
+    const b = cats[index];
+    this.categoryService.swapOrder(a.id!, a.order, b.id!, b.order);
+  }
+
+  moveDown(index: number) {
+    const cats = this.categories();
+    if (index >= cats.length - 1) return;
+    const a = cats[index];
+    const b = cats[index + 1];
+    this.categoryService.swapOrder(a.id!, a.order, b.id!, b.order);
+  }
 
   async deleteCategory(id: string, name: string) {
     if (confirm(`Excluir "${name}" e todas as suas cifras?`)) {

@@ -65,6 +65,15 @@ export class CategoryService {
     return updateDoc(doc(this.db.firestoreInstance, `users/${uid}/categories/${id}`), changes);
   }
 
+  async swapOrder(idA: string, orderA: number, idB: string, orderB: number) {
+    const uid = this.auth.uid();
+    if (!uid) throw new Error('Não autenticado');
+    const batch = writeBatch(this.db.firestoreInstance);
+    batch.update(doc(this.db.firestoreInstance, `users/${uid}/categories/${idA}`), { order: orderB });
+    batch.update(doc(this.db.firestoreInstance, `users/${uid}/categories/${idB}`), { order: orderA });
+    return batch.commit();
+  }
+
   async remove(id: string) {
     const uid = this.auth.uid();
     if (!uid) throw new Error('Não autenticado');
