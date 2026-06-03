@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { switchMap } from 'rxjs';
+import { from, switchMap } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SongService } from '../../core/services/song.service';
 import { CategoryService } from '../../core/services/category.service';
@@ -21,15 +21,15 @@ export class SongListComponent {
   private songService = inject(SongService);
   readonly categoryService = inject(CategoryService);
 
-  categoryId = toSignal(this.route.paramMap.pipe(map((p) => Number(p.get('id')))), { initialValue: 0 });
+  categoryId = toSignal(this.route.paramMap.pipe(map((p) => p.get('id') ?? '')), { initialValue: '' });
 
   category = toSignal(
-    this.route.paramMap.pipe(switchMap((p) => this.categoryService.get(Number(p.get('id'))))),
+    this.route.paramMap.pipe(switchMap((p) => from(this.categoryService.get(p.get('id') ?? '')))),
     { initialValue: undefined }
   );
 
   private songs = toSignal(
-    this.route.paramMap.pipe(switchMap((p) => this.songService.byCategory$(Number(p.get('id'))))),
+    this.route.paramMap.pipe(switchMap((p) => this.songService.byCategory$(p.get('id') ?? ''))),
     { initialValue: [] }
   );
 
@@ -46,14 +46,14 @@ export class SongListComponent {
     this.categoryService.categories().filter(c => c.id !== this.categoryId())
   );
 
-  activeCloneId = signal<number | null>(null);
+  activeCloneId = signal<string | null>(null);
   clonedMsg = signal('');
 
-  toggleClone(songId: number) {
+  toggleClone(songId: string) {
     this.activeCloneId.set(this.activeCloneId() === songId ? null : songId);
   }
 
-  async cloneToCategory(song: Song, targetCategoryId: number, catName: string) {
+  async cloneToCategory(song: Song, targetCategoryId: string, catName: string) {
     await this.songService.clone(song.id!, targetCategoryId);
     this.activeCloneId.set(null);
     this.clonedMsg.set(`Clonado para "${catName}"`);

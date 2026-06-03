@@ -1,11 +1,11 @@
 export interface Song {
-  id?: number;
-  categoryId: number;
+  id?: string;
+  categoryId: string;
   title: string;
   author?: string;
-  originalKey: string;  // ex.: 'D', 'Em', 'G'
-  capo: number;         // casa do capotraste (0 = sem)
-  body: string;         // cifra em formato ChordPro: [D]Eis-me a[G]qui
+  originalKey: string;
+  capo: number;
+  body: string;
   createdAt: number;
   updatedAt: number;
 }

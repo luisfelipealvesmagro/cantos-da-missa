@@ -10,7 +10,7 @@
 
   <div class="row">
     <label>Categoria
-      <select (change)="categoryId.set(+$any($event.target).value)">
+      <select (change)="categoryId.set($any($event.target).value)">
         <option [value]="null" disabled [selected]="categoryId() === null">Selecione…</option>
         @for (c of categories(); track c.id) {
           <option [value]="c.id" [selected]="c.id === categoryId()">{{ c.name }}</option>

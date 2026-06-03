@@ -40,3 +40,7 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Firebase credentials — não commitar, use environment.example.ts como base
+src/environments/environment.ts
+src/environments/environment.prod.ts

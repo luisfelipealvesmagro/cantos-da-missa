@@ -26,10 +26,10 @@ export class SongEditComponent {
   categories = this.categoryService.categories;
   keys = this.tp.keys;
 
-  editingId = signal<number | null>(null);
+  editingId = signal<string | null>(null);
   title = signal('');
   author = signal('');
-  categoryId = signal<number | null>(null);
+  categoryId = signal<string | null>(null);
   originalKey = signal('G');
   capo = signal(0);
   body = signal('');
@@ -42,7 +42,7 @@ export class SongEditComponent {
     const idParam = this.route.snapshot.paramMap.get('id');
     const catParam = this.route.snapshot.paramMap.get('categoryId');
     if (idParam) {
-      this.songService.get(Number(idParam)).then((s) => {
+      this.songService.get(idParam).then((s) => {
         if (!s) return;
         this.editingId.set(s.id!);
         this.title.set(s.title);
@@ -53,11 +53,10 @@ export class SongEditComponent {
         this.body.set(s.body);
       });
     } else if (catParam) {
-      this.categoryId.set(Number(catParam));
+      this.categoryId.set(catParam);
     }
   }
 
-  /** Cola texto "acorde em cima da letra" e converte para ChordPro. */
   convertPasted() {
     const raw = this.body();
     this.body.set(this.cp.plainToChordPro(raw));

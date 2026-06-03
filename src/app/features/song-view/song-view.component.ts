@@ -31,14 +31,13 @@ export class SongViewComponent implements OnDestroy {
     return s ? this.tp.transposeChord(s.originalKey, this.steps()) : '';
   });
 
-  // auto-scroll
   scrolling = signal(false);
   speed = signal(3);
   private rafId = 0;
   private acc = 0;
 
   constructor() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = this.route.snapshot.paramMap.get('id') ?? '';
     this.songService.get(id).then((s) => {
       this.song.set(s);
       if (s) this.capo.set(s.capo ?? 0);

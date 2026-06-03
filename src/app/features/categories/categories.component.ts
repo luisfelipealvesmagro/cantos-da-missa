@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CategoryService } from '../../core/services/category.service';
 import { SongService } from '../../core/services/song.service';
 import { BackupService } from '../../core/services/backup.service';
+import { SeedService } from '../../core/services/seed.service';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { Category } from '../../core/models/category.model';
 
@@ -15,15 +16,18 @@ import { Category } from '../../core/models/category.model';
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss',
 })
-export class CategoriesComponent {
+export class CategoriesComponent implements OnInit {
   private categoryService = inject(CategoryService);
   private songService = inject(SongService);
   private backup = inject(BackupService);
+  private seed = inject(SeedService);
+
+  ngOnInit() { this.seed.ensureSeed(); }
 
   categories = this.categoryService.categories;
   private allSongs = toSignal(this.songService.all$(), { initialValue: [] });
   counts = computed(() => {
-    const m: Record<number, number | undefined> = {};
+    const m: Record<string, number | undefined> = {};
     for (const s of this.allSongs()) m[s.categoryId] = (m[s.categoryId] ?? 0) + 1;
     return m;
   });
@@ -36,7 +40,7 @@ export class CategoriesComponent {
     'self_improvement', 'auto_awesome', 'menu_book', 'redeem', 'bakery_dining',
     'waving_hand', 'celebration', 'spa'];
 
-  editingId = signal<number | null>(null);
+  editingId = signal<string | null>(null);
   editName = signal('');
   editIcon = signal('music_note');
 
@@ -64,7 +68,7 @@ export class CategoriesComponent {
 
   cancelEdit() { this.editingId.set(null); }
 
-  async deleteCategory(id: number, name: string) {
+  async deleteCategory(id: string, name: string) {
     if (confirm(`Excluir "${name}" e todas as suas cifras?`)) {
       if (this.editingId() === id) this.editingId.set(null);
       await this.categoryService.remove(id);
@@ -85,4 +89,5 @@ export class CategoriesComponent {
     }
     input.value = '';
   }
+
 }

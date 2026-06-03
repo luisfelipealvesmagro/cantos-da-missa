@@ -1,7 +1,7 @@
 export interface Category {
-  id?: number;
+  id?: string;
   name: string;
-  icon: string;     // nome do Material Symbol (ex.: 'door_open')
+  icon: string;
   order: number;
-  system?: boolean; // categorias padrão da missa
+  system?: boolean;
 }

@@ -57,3 +57,7 @@
 
 .backup { display: flex; gap: 10px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
 .backup .btn { color: var(--text-muted); font-size: 14px; }
+
+.user-menu { display: flex; align-items: center; gap: 6px; }
+.avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+.btn-icon { padding: 6px; }

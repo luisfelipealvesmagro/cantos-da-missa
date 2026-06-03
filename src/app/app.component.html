@@ -2,12 +2,22 @@
   <div class="container bar">
     <a routerLink="/" class="brand">
       <app-icon name="church" [size]="26" class="cross" />
-      <span class="title">Cantos da Missa - Felipe e Aline</span>
+      <span class="title">Cantos da Missa</span>
     </a>
-    <button class="theme-toggle" (click)="theme.toggle()"
-            [attr.aria-label]="theme.theme() === 'dark' ? 'Modo claro' : 'Modo escuro'">
-      <app-icon [name]="theme.theme() === 'dark' ? 'light_mode' : 'dark_mode'" [size]="22" />
-    </button>
+    <div class="bar-end">
+      <button class="theme-toggle" (click)="theme.toggle()"
+              [attr.aria-label]="theme.theme() === 'dark' ? 'Modo claro' : 'Modo escuro'">
+        <app-icon [name]="theme.theme() === 'dark' ? 'light_mode' : 'dark_mode'" [size]="22" />
+      </button>
+      @if (auth.uid()) {
+        @if (auth.photoURL()) {
+          <img [src]="auth.photoURL()!" [alt]="auth.displayName() ?? ''" class="avatar" />
+        }
+        <button class="theme-toggle" (click)="auth.signOut()" title="Sair">
+          <app-icon name="logout" [size]="20" />
+        </button>
+      }
+    </div>
   </div>
 </header>
 

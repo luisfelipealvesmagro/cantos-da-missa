@@ -1,7 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet, RouterLink } from '@angular/router';
+import { Component, OnInit, effect, inject } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ThemeService } from './core/services/theme.service';
-import { SeedService } from './core/services/seed.service';
+import { AuthService } from './core/services/auth.service';
 import { IconComponent } from './shared/icon/icon.component';
 
 @Component({
@@ -13,10 +13,21 @@ import { IconComponent } from './shared/icon/icon.component';
 })
 export class AppComponent implements OnInit {
   protected theme = inject(ThemeService);
-  private seed = inject(SeedService);
+  protected auth = inject(AuthService);
+  private router = inject(Router);
+
+  constructor() {
+    effect(() => {
+      if (!this.auth.isReady()) return;
+      if (!this.auth.uid()) {
+        this.router.navigate(['/login']);
+      } else if (this.router.url === '/login') {
+        this.router.navigate(['/']);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.theme.init();
-    this.seed.ensureSeed();
   }
 }

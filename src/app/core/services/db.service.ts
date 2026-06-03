@@ -1,23 +1,36 @@
-import { Injectable } from '@angular/core';
-import Dexie, { Table } from 'dexie';
+import { Injectable, computed, inject } from '@angular/core';
+import { CollectionReference, Firestore, collection } from '@angular/fire/firestore';
+import { AuthService } from './auth.service';
 import { Category } from '../models/category.model';
 import { Song } from '../models/song.model';
 
-/**
- * Banco local em IndexedDB via Dexie. Toda a base vive no dispositivo.
- * Para sincronizar entre aparelhos depois, basta plugar Firestore/Supabase
- * aqui (ou usar o export/import de JSON do BackupService).
- */
+/** Centraliza as referências às coleções do Firestore para o usuário autenticado. */
 @Injectable({ providedIn: 'root' })
-export class DbService extends Dexie {
-  categories!: Table<Category, number>;
-  songs!: Table<Song, number>;
+export class DbService {
+  private firestore = inject(Firestore);
+  private auth = inject(AuthService);
 
-  constructor() {
-    super('cantos-da-missa');
-    this.version(1).stores({
-      categories: '++id, order, name',
-      songs: '++id, categoryId, title',
-    });
+  readonly categoriesCol = computed<CollectionReference<Category> | null>(() => {
+    const uid = this.auth.uid();
+    if (!uid) return null;
+    return collection(this.firestore, `users/${uid}/categories`) as CollectionReference<Category>;
+  });
+
+  readonly songsCol = computed<CollectionReference<Song> | null>(() => {
+    const uid = this.auth.uid();
+    if (!uid) return null;
+    return collection(this.firestore, `users/${uid}/songs`) as CollectionReference<Song>;
+  });
+
+  docRef(path: string) {
+    return collection(this.firestore, path);
+  }
+
+  get firestoreInstance() {
+    return this.firestore;
+  }
+
+  get uid() {
+    return this.auth.uid();
   }
 }
