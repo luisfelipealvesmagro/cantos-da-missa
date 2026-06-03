@@ -1,13 +1,11 @@
 <div class="play-head">
-  <button class="icon-btn" (click)="back()" aria-label="Voltar">
-    <app-icon name="arrow_back" [size]="24" />
+  <button class="back-btn" (click)="back()" aria-label="Voltar">
+    <app-icon name="arrow_back" [size]="20" />
   </button>
-  <div class="head-info">
-    <span class="pl-name">{{ playlist()?.name }}</span>
-    @if (songs().length > 0) {
-      <span class="counter">{{ index() + 1 }} / {{ songs().length }}</span>
-    }
-  </div>
+  <span class="pl-name">{{ playlist()?.name }}</span>
+  @if (songs().length > 0) {
+    <span class="counter">{{ index() + 1 }}/{{ songs().length }}</span>
+  }
 </div>
 
 @if (currentSong(); as song) {
@@ -16,25 +14,36 @@
     @if (song.author) { <span class="author">{{ song.author }}</span> }
   </div>
 
-  <!-- Controles de tom / capo / fonte / scroll -->
-  <div class="controls">
-    <div class="ctrl-group">
-      <button class="icon-btn sm" (click)="transposeDown()"><app-icon name="remove" [size]="18" /></button>
-      <span class="ctrl-label">{{ currentKey() }}</span>
-      <button class="icon-btn sm" (click)="transposeUp()"><app-icon name="add" [size]="18" /></button>
+  <div class="toolbar">
+    <div class="group">
+      <span class="lbl">Tom</span>
+      <button class="btn-icon" (click)="transposeDown()" aria-label="Abaixar meio tom"><app-icon name="remove" [size]="20" /></button>
+      <select class="key" (change)="selectKey($any($event.target).value)" aria-label="Escolher tom">
+        @for (k of keys; track k) {
+          <option [value]="k" [selected]="k === currentKey()">{{ k }}</option>
+        }
+      </select>
+      <button class="btn-icon" (click)="transposeUp()" aria-label="Subir meio tom"><app-icon name="add" [size]="20" /></button>
     </div>
-    <div class="ctrl-group">
-      <button class="icon-btn sm" (click)="capoDown()"><app-icon name="remove" [size]="18" /></button>
-      <span class="ctrl-label">Capo {{ capo() }}</span>
-      <button class="icon-btn sm" (click)="capoUp()"><app-icon name="add" [size]="18" /></button>
+
+    <div class="group">
+      <span class="lbl">Capo</span>
+      <button class="btn-icon" (click)="capoDown()" aria-label="Diminuir capotraste"><app-icon name="remove" [size]="20" /></button>
+      <span class="val">{{ capo() === 0 ? '—' : capo() }}</span>
+      <button class="btn-icon" (click)="capoUp()" aria-label="Aumentar capotraste"><app-icon name="add" [size]="20" /></button>
     </div>
-    <div class="ctrl-group">
-      <button class="icon-btn sm" (click)="fontDown()"><app-icon name="text_decrease" [size]="18" /></button>
-      <button class="icon-btn sm" (click)="fontUp()"><app-icon name="text_increase" [size]="18" /></button>
+
+    <div class="group">
+      <button class="btn-icon" (click)="fontDown()" aria-label="Diminuir fonte"><app-icon name="text_decrease" [size]="20" /></button>
+      <button class="btn-icon" (click)="fontUp()" aria-label="Aumentar fonte"><app-icon name="text_increase" [size]="20" /></button>
     </div>
-    <button class="icon-btn sm" [class.active]="scrolling()" (click)="toggleScroll()" title="Auto-scroll">
-      <app-icon name="swap_vert" [size]="18" />
-    </button>
+
+    <div class="group scroll">
+      <button class="btn-icon" [class.active]="scrolling()" (click)="toggleScroll()" [attr.aria-label]="scrolling() ? 'Pausar rolagem' : 'Rolar automaticamente'">
+        <app-icon [name]="scrolling() ? 'pause' : 'play_arrow'" [size]="20" />
+      </button>
+      <input class="speed" type="range" min="1" max="10" step="1" [value]="speed()" (input)="speed.set(+$any($event.target).value)" aria-label="Velocidade da rolagem" />
+    </div>
   </div>
 
   <app-chord-sheet [body]="song.body" [transposeSteps]="steps()" [capo]="capo()" [fontScale]="fontScale()" />
