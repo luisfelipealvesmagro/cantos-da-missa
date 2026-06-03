@@ -32,4 +32,20 @@ export class SongService {
   }
 
   remove(id: number) { return this.db.songs.delete(id); }
+
+  async clone(songId: number, targetCategoryId: number): Promise<number> {
+    const song = await this.db.songs.get(songId);
+    if (!song) throw new Error('Música não encontrada');
+    const now = Date.now();
+    return this.db.songs.add({
+      categoryId: targetCategoryId,
+      title: song.title,
+      author: song.author,
+      originalKey: song.originalKey,
+      capo: song.capo,
+      body: song.body,
+      createdAt: now,
+      updatedAt: now,
+    });
+  }
 }

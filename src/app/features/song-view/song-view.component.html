@@ -12,8 +12,10 @@
     <div class="group">
       <span class="lbl">Tom</span>
       <button class="btn-icon" (click)="transposeDown()" aria-label="Abaixar meio tom"><app-icon name="remove" [size]="20" /></button>
-      <select class="key" [value]="currentKey()" (change)="selectKey($any($event.target).value)" aria-label="Escolher tom">
-        @for (k of keys; track k) { <option [value]="k">{{ k }}</option> }
+      <select class="key" (change)="selectKey($any($event.target).value)" aria-label="Escolher tom">
+        @for (k of keys; track k) {
+          <option [value]="k" [selected]="k === currentKey()">{{ k }}</option>
+        }
       </select>
       <button class="btn-icon" (click)="transposeUp()" aria-label="Subir meio tom"><app-icon name="add" [size]="20" /></button>
     </div>

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SongService } from '../../core/services/song.service';
 import { CategoryService } from '../../core/services/category.service';
 import { ChordProService } from '../../core/services/chordpro.service';
@@ -10,7 +10,7 @@ import { IconComponent } from '../../shared/icon/icon.component';
 @Component({
   selector: 'app-song-edit',
   standalone: true,
-  imports: [RouterLink, ChordSheetComponent, IconComponent],
+  imports: [ChordSheetComponent, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './song-edit.component.html',
   styleUrl: './song-edit.component.scss',

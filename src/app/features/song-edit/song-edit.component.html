@@ -10,9 +10,11 @@
 
   <div class="row">
     <label>Categoria
-      <select [value]="categoryId()" (change)="categoryId.set(+$any($event.target).value)">
-        <option [value]="null" disabled>Selecione…</option>
-        @for (c of categories(); track c.id) { <option [value]="c.id">{{ c.name }}</option> }
+      <select (change)="categoryId.set(+$any($event.target).value)">
+        <option [value]="null" disabled [selected]="categoryId() === null">Selecione…</option>
+        @for (c of categories(); track c.id) {
+          <option [value]="c.id" [selected]="c.id === categoryId()">{{ c.name }}</option>
+        }
       </select>
     </label>
     <label>Autor
@@ -22,8 +24,10 @@
 
   <div class="row">
     <label>Tom original
-      <select [value]="originalKey()" (change)="originalKey.set($any($event.target).value)">
-        @for (k of keys; track k) { <option [value]="k">{{ k }}</option> }
+      <select (change)="originalKey.set($any($event.target).value)">
+        @for (k of keys; track k) {
+          <option [value]="k" [selected]="k === originalKey()">{{ k }}</option>
+        }
       </select>
     </label>
     <label>Capotraste

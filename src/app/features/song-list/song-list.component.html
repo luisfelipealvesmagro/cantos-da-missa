@@ -9,20 +9,46 @@
          [value]="query()" (input)="query.set($any($event.target).value)" />
 </div>
 
+@if (clonedMsg()) {
+  <p class="cloned-toast">{{ clonedMsg() }}</p>
+}
+
 @if (filtered().length) {
   <ul class="list">
     @for (song of filtered(); track song.id) {
       <li>
-        <a [routerLink]="['/musica', song.id]">
-          <span class="info">
-            <span class="t">{{ song.title }}</span>
-            <span class="meta">
-              Tom: {{ song.originalKey }}{{ song.capo ? ' · capo ' + song.capo : '' }}
-              {{ song.author ? ' · ' + song.author : '' }}
+        <div class="row">
+          <a [routerLink]="['/musica', song.id]">
+            <span class="info">
+              <span class="t">{{ song.title }}</span>
+              <span class="meta">
+                Tom: {{ song.originalKey }}{{ song.capo ? ' · capo ' + song.capo : '' }}
+                {{ song.author ? ' · ' + song.author : '' }}
+              </span>
             </span>
-          </span>
-          <app-icon name="chevron_right" [size]="22" class="chev" />
-        </a>
+            <app-icon name="chevron_right" [size]="22" class="chev" />
+          </a>
+          <button class="clone-btn" [class.active]="activeCloneId() === song.id"
+                  (click)="toggleClone(song.id!)" [attr.aria-label]="'Clonar ' + song.title">
+            <app-icon name="content_copy" [size]="18" />
+          </button>
+        </div>
+        @if (activeCloneId() === song.id) {
+          <div class="clone-picker">
+            <p class="picker-label">Clonar para qual categoria?</p>
+            <div class="picker-cats">
+              @for (cat of otherCategories(); track cat.id) {
+                <button class="cat-opt" (click)="cloneToCategory(song, cat.id!, cat.name)">
+                  <app-icon [name]="cat.icon" [size]="16" />
+                  {{ cat.name }}
+                </button>
+              }
+              @if (!otherCategories().length) {
+                <p class="picker-empty">Não há outras categorias.</p>
+              }
+            </div>
+          </div>
+        }
       </li>
     }
   </ul>

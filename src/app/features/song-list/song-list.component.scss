@@ -11,15 +11,51 @@ h2 { font-size: 24px; }
 .search input:focus { border: none; }
 
 .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.list a {
-  display: flex; align-items: center; gap: 10px;
+
+.row {
+  display: flex; align-items: stretch;
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 13px 16px; box-shadow: var(--shadow);
+  border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
+}
+.row a {
+  display: flex; align-items: center; gap: 10px;
+  flex: 1; padding: 13px 16px;
 }
 .info { display: flex; flex-direction: column; flex: 1; }
 .t { font-weight: 500; font-size: 16px; }
 .meta { font-size: 13px; color: var(--text-muted); }
 .chev { color: var(--text-muted); }
+
+.clone-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; flex-shrink: 0;
+  color: var(--text-muted); border-left: 1px solid var(--border);
+  transition: color .15s, background .15s;
+}
+.clone-btn:active, .clone-btn.active { color: var(--primary-2); background: var(--surface-2); }
+
+.clone-picker {
+  margin-top: 4px; padding: 12px 14px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.picker-label { font-size: 12px; color: var(--text-muted); margin: 0 0 10px; }
+.picker-cats { display: flex; flex-wrap: wrap; gap: 6px; }
+.cat-opt {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: 13px; font-weight: 500; color: var(--text);
+  transition: border-color .12s, background .12s;
+}
+.cat-opt:active { background: var(--surface-2); border-color: var(--primary-2); color: var(--primary-2); }
+.picker-empty { font-size: 13px; color: var(--text-muted); margin: 0; }
+
+.cloned-toast {
+  text-align: center; font-size: 13px;
+  color: var(--accent); margin: 0 0 12px;
+}
+
 .empty { color: var(--text-muted); text-align: center; padding: 30px 0; }
 
 .add {

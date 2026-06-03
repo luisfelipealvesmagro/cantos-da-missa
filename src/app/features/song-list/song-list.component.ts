@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { SongService } from '../../core/services/song.service';
 import { CategoryService } from '../../core/services/category.service';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { Song } from '../../core/models/song.model';
 
 @Component({
   selector: 'app-song-list',
@@ -18,7 +19,7 @@ import { IconComponent } from '../../shared/icon/icon.component';
 export class SongListComponent {
   private route = inject(ActivatedRoute);
   private songService = inject(SongService);
-  private categoryService = inject(CategoryService);
+  readonly categoryService = inject(CategoryService);
 
   categoryId = toSignal(this.route.paramMap.pipe(map((p) => Number(p.get('id')))), { initialValue: 0 });
 
@@ -40,4 +41,22 @@ export class SongListComponent {
     return list.filter((s) =>
       s.title.toLowerCase().includes(q) || (s.author ?? '').toLowerCase().includes(q));
   });
+
+  otherCategories = computed(() =>
+    this.categoryService.categories().filter(c => c.id !== this.categoryId())
+  );
+
+  activeCloneId = signal<number | null>(null);
+  clonedMsg = signal('');
+
+  toggleClone(songId: number) {
+    this.activeCloneId.set(this.activeCloneId() === songId ? null : songId);
+  }
+
+  async cloneToCategory(song: Song, targetCategoryId: number, catName: string) {
+    await this.songService.clone(song.id!, targetCategoryId);
+    this.activeCloneId.set(null);
+    this.clonedMsg.set(`Clonado para "${catName}"`);
+    setTimeout(() => this.clonedMsg.set(''), 2500);
+  }
 }

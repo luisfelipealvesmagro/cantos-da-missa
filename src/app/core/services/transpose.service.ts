@@ -11,8 +11,16 @@ export class TransposeService {
   private readonly flat  = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
   private readonly base: Record<string, number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
 
-  /** Lista dos 12 tons maiores (para o seletor). */
-  readonly keys = this.sharp;
+  /** Lista de tons maiores e menores para o seletor, em ordem alfabética. */
+  readonly keys = [
+    'A', 'A#', 'A#m', 'Am',
+    'B', 'Bm',
+    'C', 'C#', 'C#m', 'Cm',
+    'D', 'D#', 'D#m', 'Dm',
+    'E', 'Em',
+    'F', 'F#', 'F#m', 'Fm',
+    'G', 'G#', 'G#m', 'Gm',
+  ];
 
   /** Índice 0–11 de uma nota raiz como 'C', 'F#', 'Bb'. */
   private noteToIndex(note: string): number | null {
@@ -54,6 +62,6 @@ export class TransposeService {
   isChord(token: string): boolean {
     const t = token.trim();
     if (!t) return false;
-    return /^[A-G][#b]?(maj|min|m|dim|aug|sus|add|M)?\d{0,2}(sus\d|add\d{1,2}|[#b]\d{1,2}|\+|°|ø)*(\([^)]*\))?(\/[A-G][#b]?)?$/.test(t);
+    return /^[A-G][#b]?(maj|min|m|dim|aug|sus|add|M)?\d{0,2}M?(sus\d|add\d{1,2}|[#b]\d{1,2}|\+|°|ø)*(\([^)]*\))?(\/[A-G][#b]?)?$/.test(t);
   }
 }

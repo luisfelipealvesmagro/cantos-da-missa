@@ -50,20 +50,45 @@ export class ChordProService {
   plainToChordPro(text: string): string {
     const lines = (text || '').replace(/\r/g, '').split('\n');
     const out: string[] = [];
+
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      if (this.isChordLine(line)) {
+
+      // [Intro], [Refrão], [Primeira Parte] → {c: Label}
+      const sectionMatch = line.match(/^\s*\[([^\]]+)\]\s*(.*?)\s*$/);
+      if (sectionMatch && !this.tp.isChord(sectionMatch[1].trim())) {
+        out.push(`{c: ${sectionMatch[1].trim()}}`);
+        const rest = sectionMatch[2].trim();
+        if (rest) {
+          out.push(this.isChordLine(rest) ? rest.replace(/(\S+)/g, '[$1]') : rest);
+        }
+        continue;
+      }
+
+      // Strip parenthetical alternates — ( C/E D ) — only for detection/merge;
+      // positions before the first '(' are preserved exactly.
+      const parenIdx = line.indexOf('(');
+      const forDetect = parenIdx >= 0 ? line.slice(0, parenIdx).trimEnd() : line;
+
+      if (this.isChordLine(forDetect)) {
         const next = lines[i + 1];
-        if (next !== undefined && next.trim() !== '' && !this.isChordLine(next)) {
-          out.push(this.merge(line, next));
+        const nextClean = next !== undefined ? next.replace(/\s*\([^)]*\)/g, '') : '';
+        const isNextLyric = next !== undefined
+          && next.trim() !== ''
+          && !this.isChordLine(nextClean)
+          && !/^\s*\[[^\]]+\]/.test(next);
+
+        if (isNextLyric) {
+          out.push(this.merge(forDetect, next));
           i++;
         } else {
-          out.push(line.replace(/(\S+)/g, '[$1]'));
+          out.push(forDetect.trim().replace(/(\S+)/g, '[$1]'));
         }
       } else {
         out.push(line);
       }
     }
+
     return out.join('\n');
   }
 
