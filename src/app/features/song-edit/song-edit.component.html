@@ -35,29 +35,34 @@
     </label>
   </div>
 
-  <label class="body-label">
-    <span class="body-head">
-      Cifra (formato ChordPro)
-      <button class="btn btn-ghost mini" (click)="convertPasted()" title="Converte texto com acordes em cima da letra">
-        <app-icon name="auto_fix_high" [size]="18" /> Converter colado
+  <div class="editor-row" [class.has-preview]="showPreview() && body().trim()">
+    <label class="body-label">
+      <span class="body-head">
+        Cifra (formato ChordPro)
+        <button class="btn btn-ghost mini" (click)="convertPasted()" title="Converte texto com acordes em cima da letra">
+          <app-icon name="auto_fix_high" [size]="18" /> Converter colado
+        </button>
+      </span>
+      <textarea rows="12" [value]="body()" (input)="body.set($any($event.target).value)"
+        placeholder="Use [Acorde] dentro da letra, ex.:&#10;[D]Eis-me a[G]qui Senhor&#10;&#10;Ou cole no formato com acordes em cima da letra e toque em 'Converter colado'."></textarea>
+    </label>
+
+    @if (showPreview() && body().trim()) {
+      <div class="preview-wrap">
+        <span class="preview-head">Pré-visualização</span>
+        <div class="preview-body">
+          <app-chord-sheet [body]="body()" [transposeSteps]="0" [capo]="0" [fontScale]="1" />
+        </div>
+      </div>
+    }
+  </div>
+  <div class="footer-row">
+    <small class="hint">Dica: <code>[G]</code> antes da sílaba; <code>&#123;c: Refrão&#125;</code> cria um título de seção.</small>
+    <div class="actions">
+      <button class="btn btn-ghost" (click)="cancel()">Cancelar</button>
+      <button class="btn btn-primary" [disabled]="!canSave()" (click)="save()">
+        <app-icon name="check" [size]="20" /> Salvar
       </button>
-    </span>
-    <textarea rows="12" [value]="body()" (input)="body.set($any($event.target).value)"
-      placeholder="Use [Acorde] dentro da letra, ex.:&#10;[D]Eis-me a[G]qui Senhor&#10;&#10;Ou cole no formato com acordes em cima da letra e toque em 'Converter colado'."></textarea>
-    <small>Dica: <code>[G]</code> antes da sílaba; <code>&#123;c: Refrão&#125;</code> cria um título de seção.</small>
-  </label>
-
-  @if (showPreview() && body().trim()) {
-    <div class="preview">
-      <span class="preview-tag">Pré-visualização</span>
-      <app-chord-sheet [body]="body()" [transposeSteps]="0" [capo]="0" [fontScale]="1" />
     </div>
-  }
-
-  <div class="actions">
-    <button class="btn btn-ghost" (click)="cancel()">Cancelar</button>
-    <button class="btn btn-primary" [disabled]="!canSave()" (click)="save()">
-      <app-icon name="check" [size]="20" /> Salvar
-    </button>
   </div>
 </div>
