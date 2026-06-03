@@ -46,6 +46,10 @@ export class ChordProService {
   /**
    * Conversor: texto com acordes numa linha e letra na linha de baixo
    * (estilo Cifra Club) → ChordPro com [acordes] embutidos na letra.
+   *
+   * Parênteses de agrupamento — ( D  A/C# ) — contêm espaços internos e são
+   * ignorados. Extensões de acorde — A7(4/9), Bm7(11) — não têm espaços e
+   * são preservadas no nome do acorde.
    */
   plainToChordPro(text: string): string {
     const lines = (text || '').replace(/\r/g, '').split('\n');
@@ -60,26 +64,23 @@ export class ChordProService {
         out.push(`{c: ${sectionMatch[1].trim()}}`);
         const rest = sectionMatch[2].trim();
         if (rest) {
-          out.push(this.isChordLine(rest) ? rest.replace(/(\S+)/g, '[$1]') : rest);
+          const restDetect = this.stripGroupParens(rest);
+          out.push(this.isChordLine(restDetect) ? rest.replace(/(\S+)/g, '[$1]') : rest);
         }
         continue;
       }
 
-      // Strip parenthetical alternates — ( C/E D ) — only for detection/merge;
-      // positions before the first '(' are preserved exactly.
-      const parenIdx = line.indexOf('(');
-      const forDetect = parenIdx >= 0 ? line.slice(0, parenIdx).trimEnd() : line;
+      const forDetect = this.stripGroupParens(line);
 
       if (this.isChordLine(forDetect)) {
         const next = lines[i + 1];
-        const nextClean = next !== undefined ? next.replace(/\s*\([^)]*\)/g, '') : '';
         const isNextLyric = next !== undefined
           && next.trim() !== ''
-          && !this.isChordLine(nextClean)
+          && !this.isChordLine(this.stripGroupParens(next))
           && !/^\s*\[[^\]]+\]/.test(next);
 
         if (isNextLyric) {
-          out.push(this.merge(forDetect, next));
+          out.push(this.merge(this.blankGroupParens(line), next));
           i++;
         } else {
           out.push(forDetect.trim().replace(/(\S+)/g, '[$1]'));
@@ -90,6 +91,33 @@ export class ChordProService {
     }
 
     return out.join('\n');
+  }
+
+  /**
+   * Remove parênteses de agrupamento (contêm espaços) e parênteses
+   * órfãos resultantes. Preserva extensões de acorde sem espaços: (4/9), (11).
+   * Se a linha inteira for um grupo entre parênteses, extrai o conteúdo.
+   */
+  private stripGroupParens(line: string): string {
+    const stripped = line
+      .replace(/\([^)]*\s[^)]*\)/g, '')  // remove grupos com espaço interno
+      .replace(/\s\)/g, '');              // remove ) órfãos precedidos de espaço
+
+    // Se a linha era apenas um grupo entre parênteses, extrai o interior
+    if (!stripped.trim() && line.includes('(')) {
+      return line.replace(/[()]/g, ' ');
+    }
+    return stripped;
+  }
+
+  /**
+   * Substitui parênteses de agrupamento por espaços de igual comprimento,
+   * preservando as posições dos acordes reais para o merge.
+   */
+  private blankGroupParens(line: string): string {
+    return line
+      .replace(/\([^)]*\s[^)]*\)/g, m => ' '.repeat(m.length))
+      .replace(/(\s)\)/g, '$1 ');  // ) órfão → espaço, mantendo comprimento
   }
 
   private isChordLine(line: string): boolean {

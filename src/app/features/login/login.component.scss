@@ -15,6 +15,13 @@
   gap: 1rem;
 }
 
+.app-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 18px;
+  margin: 0 auto;
+}
+
 .verse {
   font-family: var(--font-title, serif);
   font-style: italic;
