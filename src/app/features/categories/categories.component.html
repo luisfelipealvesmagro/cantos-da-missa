@@ -84,6 +84,8 @@
   </button>
 }
 
+<p class="total-songs">{{ totalSongs() }} {{ totalSongs() === 1 ? 'música' : 'músicas' }} no total</p>
+
 @if (manage()) {
   <footer class="backup">
     <button class="btn btn-ghost" (click)="exportData()"><app-icon name="download" [size]="20" /> Exportar backup</button>

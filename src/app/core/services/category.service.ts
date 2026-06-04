@@ -1,10 +1,9 @@
-import { Injectable, computed, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   CollectionReference,
   addDoc,
   collection,
-  deleteDoc,
   doc,
   getDoc,
   getDocs,

@@ -31,6 +31,7 @@ export class CategoriesComponent implements OnInit {
     for (const s of this.allSongs()) m[s.categoryId] = (m[s.categoryId] ?? 0) + 1;
     return m;
   });
+  totalSongs = computed(() => this.allSongs().length);
 
   manage = signal(false);
   adding = signal(false);
