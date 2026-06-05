@@ -36,12 +36,10 @@
       <button class="btn-icon" (click)="capoUp()" aria-label="Aumentar capotraste"><app-icon name="add" [size]="20" /></button>
     </div>
 
-    <div class="group">
+    <div class="group scroll">
       <button class="btn-icon" (click)="fontDown()" aria-label="Diminuir fonte"><app-icon name="text_decrease" [size]="20" /></button>
       <button class="btn-icon" (click)="fontUp()" aria-label="Aumentar fonte"><app-icon name="text_increase" [size]="20" /></button>
-    </div>
-
-    <div class="group scroll">
+      <span class="sep"></span>
       <button class="btn-icon" [class.active]="scrolling()" (click)="toggleScroll()" [attr.aria-label]="scrolling() ? 'Pausar rolagem' : 'Rolar automaticamente'">
         <app-icon [name]="scrolling() ? 'pause' : 'play_arrow'" [size]="20" />
       </button>
