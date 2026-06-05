@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PlaylistService } from '../../core/services/playlist.service';
 import { SongService } from '../../core/services/song.service';
+import { CategoryService } from '../../core/services/category.service';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { Song } from '../../core/models/song.model';
 
@@ -19,8 +20,14 @@ export class PlaylistEditComponent {
   private router = inject(Router);
   private playlistService = inject(PlaylistService);
   private songService = inject(SongService);
+  private categoryService = inject(CategoryService);
 
   private allSongs = toSignal(this.songService.all$(), { initialValue: [] as Song[] });
+
+  categoryName = computed(() => {
+    const map = new Map(this.categoryService.categories().map((c) => [c.id, c.name]));
+    return (categoryId: string) => map.get(categoryId) ?? '';
+  });
 
   editingId = signal<string | null>(null);
   name = signal('');

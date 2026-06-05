@@ -17,8 +17,13 @@
 .name { font-weight: 500; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .count { font-size: 13px; color: var(--text-muted); }
 
-.actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-.danger { color: var(--danger); }
+.actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+.icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%; color: var(--text-muted);
+  &:hover { background: var(--surface-2); color: var(--text); }
+}
+.danger { color: var(--danger); &:hover { color: var(--danger); } }
 
 .add {
   display: flex; align-items: center; justify-content: center; gap: 8px;

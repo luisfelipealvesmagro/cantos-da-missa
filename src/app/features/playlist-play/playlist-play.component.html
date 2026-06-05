@@ -4,7 +4,10 @@
   </button>
   <span class="pl-name">{{ playlist()?.name }}</span>
   @if (songs().length > 0) {
-    <span class="counter">{{ index() + 1 }}/{{ songs().length }}</span>
+    <button class="counter" (click)="showSongPicker.set(!showSongPicker())" aria-label="Ir para música">
+      {{ index() + 1 }}/{{ songs().length }}
+      <app-icon name="expand_more" [size]="16" />
+    </button>
   }
 </div>
 
@@ -50,20 +53,44 @@
 
   <!-- Barra de navegação prev / next -->
   <nav class="nav-bar">
-    <button class="nav-btn" (click)="prev()" [disabled]="isFirst()">
-      <app-icon name="skip_previous" [size]="28" />
-      <span>Anterior</span>
+    <button class="nav-btn" (click)="prev()" [disabled]="isFirst()" aria-label="Anterior">
+      <app-icon name="skip_previous" [size]="22" />
     </button>
-    <div class="nav-center">
+<div class="nav-center">
       @for (s of songs(); track s.id; let i = $index) {
         <span class="dot" [class.active]="i === index()"></span>
       }
     </div>
-    <button class="nav-btn" (click)="next()" [disabled]="isLast()">
-      <span>Próxima</span>
-      <app-icon name="skip_next" [size]="28" />
+    <button class="nav-btn" (click)="next()" [disabled]="isLast()" aria-label="Próxima">
+      <app-icon name="skip_next" [size]="22" />
     </button>
   </nav>
+
+  @if (showSongPicker()) {
+    <div class="picker-backdrop" (click)="showSongPicker.set(false)"></div>
+    <div class="song-picker">
+      <div class="picker-head">
+        <span>Ir para música</span>
+        <button class="nav-btn" (click)="showSongPicker.set(false)" aria-label="Fechar">
+          <app-icon name="close" [size]="20" />
+        </button>
+      </div>
+      <ul class="picker-list">
+        @for (s of songs(); track s.id; let i = $index) {
+          <li>
+            <button class="picker-item" [class.current]="i === index()" (click)="jumpTo(i)">
+              <span class="picker-num">{{ i + 1 }}</span>
+              <span class="picker-info">
+                <span class="picker-title">{{ s.title }}</span>
+                @if (s.author) { <span class="picker-author">{{ s.author }}</span> }
+              </span>
+              @if (i === index()) { <app-icon name="volume_up" [size]="16" /> }
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+  }
 } @else if (songs().length === 0 && playlist()) {
   <p class="empty">Carregando músicas…</p>
 }

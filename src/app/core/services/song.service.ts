@@ -6,6 +6,7 @@ import {
   collection,
   collectionData,
   deleteDoc,
+  deleteField,
   doc,
   getDoc,
   orderBy,
@@ -76,8 +77,11 @@ export class SongService {
   update(id: string, changes: Partial<Omit<Song, 'id'>>) {
     const uid = this.auth.uid();
     if (!uid) throw new Error('Não autenticado');
+    const payload = Object.fromEntries(
+      Object.entries(changes).map(([k, v]) => [k, v === undefined ? deleteField() : v]),
+    );
     return updateDoc(doc(this.db.firestoreInstance, `users/${uid}/songs/${id}`), {
-      ...this.clean(changes),
+      ...payload,
       updatedAt: Date.now(),
     });
   }

@@ -30,6 +30,7 @@ export class PlaylistPlayComponent implements OnDestroy {
   capo = signal(0);
   fontScale = signal(1);
   showControls = signal(true);
+  showSongPicker = signal(false);
 
   keys = this.tp.keys;
 
@@ -71,6 +72,13 @@ export class PlaylistPlayComponent implements OnDestroy {
     this.stopScroll();
     this.index.update((i) => i + 1);
     this.resetControls();
+  }
+
+  jumpTo(i: number) {
+    this.stopScroll();
+    this.index.set(i);
+    this.resetControls();
+    this.showSongPicker.set(false);
   }
 
   private resetControls() {
