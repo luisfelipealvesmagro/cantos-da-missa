@@ -55,6 +55,27 @@ src/app/
     └── song-edit/     editor com preview
 ```
 
+## Deploy (Firebase Hosting)
+
+O app está publicado em **https://cantos-da-missa.web.app**.
+
+Para publicar uma nova versão após alterações:
+
+```bash
+ng build && firebase deploy
+```
+
+Na primeira vez em uma máquina nova:
+
+```bash
+npm install -g firebase-tools
+firebase login          # abre o navegador para autenticar com a conta Google
+ng build
+firebase deploy
+```
+
+Os arquivos [firebase.json](firebase.json) e [.firebaserc](.firebaserc) já estão configurados no repositório.
+
 ## Sincronizar entre aparelhos depois (opcional)
 
 Hoje a base é local (IndexedDB). Quando quiser ver as mesmas cifras em todos os
