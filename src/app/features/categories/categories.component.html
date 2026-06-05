@@ -11,11 +11,16 @@
   </div>
 </section>
 
-<div class="grid">
+<div class="grid" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!manage()">
   @for (cat of categories(); track cat.id) {
-    <div class="cat-card">
+    <div class="cat-card" cdkDrag [cdkDragDisabled]="!manage()">
       <a class="cat-link" [routerLink]="manage() ? null : ['/categoria', cat.id]"
          [class.no-nav]="manage()">
+        @if (manage()) {
+          <span class="drag-handle" cdkDragHandle aria-label="Arrastar para reordenar">
+            <app-icon name="drag_indicator" [size]="20" />
+          </span>
+        }
         <span class="cat-icon"><app-icon [name]="cat.icon" [size]="24" /></span>
         <span class="cat-body">
           <span class="cat-name">{{ cat.name }}</span>
@@ -24,14 +29,6 @@
         @if (!manage()) { <app-icon name="chevron_right" [size]="22" class="chev" /> }
       </a>
       @if (manage()) {
-        <div class="order-btns">
-          <button (click)="moveUp($index)" [disabled]="$index === 0" aria-label="Mover para cima">
-            <app-icon name="keyboard_arrow_up" [size]="20" />
-          </button>
-          <button (click)="moveDown($index)" [disabled]="$last" aria-label="Mover para baixo">
-            <app-icon name="keyboard_arrow_down" [size]="20" />
-          </button>
-        </div>
         <button class="edit-btn" (click)="startEdit(cat)" [attr.aria-label]="'Editar ' + cat.name">
           <app-icon name="edit" [size]="18" />
         </button>

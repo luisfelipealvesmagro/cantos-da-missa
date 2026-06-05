@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { CdkDragDrop, CdkDropList, CdkDrag, CdkDragHandle, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CategoryService } from '../../core/services/category.service';
 import { SongService } from '../../core/services/song.service';
 import { BackupService } from '../../core/services/backup.service';
@@ -11,7 +12,7 @@ import { Category } from '../../core/models/category.model';
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [RouterLink, IconComponent],
+  imports: [RouterLink, IconComponent, CdkDropList, CdkDrag, CdkDragHandle],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss',
@@ -74,20 +75,10 @@ export class CategoriesComponent implements OnInit {
 
   cancelEdit() { this.editingId.set(null); }
 
-  moveUp(index: number) {
-    const cats = this.categories();
-    if (index === 0) return;
-    const a = cats[index - 1];
-    const b = cats[index];
-    this.categoryService.swapOrder(a.id!, a.order, b.id!, b.order);
-  }
-
-  moveDown(index: number) {
-    const cats = this.categories();
-    if (index >= cats.length - 1) return;
-    const a = cats[index];
-    const b = cats[index + 1];
-    this.categoryService.swapOrder(a.id!, a.order, b.id!, b.order);
+  drop(event: CdkDragDrop<Category[]>) {
+    const cats = [...this.categories()];
+    moveItemInArray(cats, event.previousIndex, event.currentIndex);
+    this.categoryService.reorder(cats);
   }
 
   async deleteCategory(id: string, name: string) {

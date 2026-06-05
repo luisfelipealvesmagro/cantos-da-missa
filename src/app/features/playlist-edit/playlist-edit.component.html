@@ -15,9 +15,12 @@
     @if (selectedSongs().length === 0) {
       <p class="hint-empty">Nenhuma música adicionada. Use a busca abaixo para adicionar.</p>
     } @else {
-      <ul class="selected-list">
-        @for (song of selectedSongs(); track song.id; let i = $index; let last = $last) {
-          <li class="selected-item">
+      <ul class="selected-list" cdkDropList (cdkDropListDropped)="drop($event)">
+        @for (song of selectedSongs(); track song.id; let i = $index) {
+          <li class="selected-item" cdkDrag>
+            <span class="drag-handle" cdkDragHandle aria-label="Arrastar para reordenar">
+              <app-icon name="drag_indicator" [size]="20" />
+            </span>
             <span class="pos">{{ i + 1 }}</span>
             <span class="song-info">
               <span class="song-title">{{ song.title }}</span>
@@ -26,14 +29,6 @@
                 <span class="song-cat">({{ cat }})</span>
               }
             </span>
-            <div class="order-btns">
-              <button (click)="moveUp(i)" [disabled]="i === 0" aria-label="Mover para cima">
-                <app-icon name="keyboard_arrow_up" [size]="20" />
-              </button>
-              <button (click)="moveDown(i)" [disabled]="last" aria-label="Mover para baixo">
-                <app-icon name="keyboard_arrow_down" [size]="20" />
-              </button>
-            </div>
             <button class="remove-btn" (click)="removeSong(i)" aria-label="Remover">
               <app-icon name="close" [size]="18" />
             </button>

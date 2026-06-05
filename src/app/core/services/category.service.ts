@@ -73,6 +73,16 @@ export class CategoryService {
     return batch.commit();
   }
 
+  async reorder(cats: Category[]) {
+    const uid = this.auth.uid();
+    if (!uid) throw new Error('Não autenticado');
+    const batch = writeBatch(this.db.firestoreInstance);
+    cats.forEach((cat, i) =>
+      batch.update(doc(this.db.firestoreInstance, `users/${uid}/categories/${cat.id}`), { order: i }),
+    );
+    return batch.commit();
+  }
+
   async remove(id: string) {
     const uid = this.auth.uid();
     if (!uid) throw new Error('Não autenticado');

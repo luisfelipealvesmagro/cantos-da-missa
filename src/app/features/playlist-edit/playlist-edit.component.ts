@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { CdkDragDrop, CdkDropList, CdkDrag, CdkDragHandle, moveItemInArray } from '@angular/cdk/drag-drop';
 import { PlaylistService } from '../../core/services/playlist.service';
 import { SongService } from '../../core/services/song.service';
 import { CategoryService } from '../../core/services/category.service';
@@ -10,7 +11,7 @@ import { Song } from '../../core/models/song.model';
 @Component({
   selector: 'app-playlist-edit',
   standalone: true,
-  imports: [IconComponent],
+  imports: [IconComponent, CdkDropList, CdkDrag, CdkDragHandle],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './playlist-edit.component.html',
   styleUrl: './playlist-edit.component.scss',
@@ -70,20 +71,10 @@ export class PlaylistEditComponent {
     this.songIds.update((ids) => ids.filter((_, i) => i !== index));
   }
 
-  moveUp(index: number) {
-    if (index === 0) return;
+  drop(event: CdkDragDrop<string[]>) {
     this.songIds.update((ids) => {
       const arr = [...ids];
-      [arr[index - 1], arr[index]] = [arr[index], arr[index - 1]];
-      return arr;
-    });
-  }
-
-  moveDown(index: number) {
-    this.songIds.update((ids) => {
-      if (index >= ids.length - 1) return ids;
-      const arr = [...ids];
-      [arr[index], arr[index + 1]] = [arr[index + 1], arr[index]];
+      moveItemInArray(arr, event.previousIndex, event.currentIndex);
       return arr;
     });
   }

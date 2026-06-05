@@ -15,8 +15,8 @@
         </div>
         <div class="actions">
           @if (pl.songIds.length > 0) {
-            <a class="btn btn-primary" [routerLink]="['/playlists', pl.id, 'tocar']">
-              <app-icon name="play_arrow" [size]="20" /> Tocar
+            <a class="btn btn-primary" [routerLink]="['/playlists', pl.id, 'tocar']" aria-label="Tocar playlist">
+              <app-icon name="play_arrow" [size]="20" />
             </a>
           }
           <a class="icon-btn" [routerLink]="['/playlists', pl.id, 'editar']" aria-label="Editar">
