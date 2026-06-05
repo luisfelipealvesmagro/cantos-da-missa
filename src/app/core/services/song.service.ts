@@ -64,16 +64,20 @@ export class SongService {
     const now = Date.now();
     const ref = await addDoc(
       collection(this.db.firestoreInstance, `users/${uid}/songs`) as CollectionReference<Omit<Song, 'id'>>,
-      { ...song, createdAt: now, updatedAt: now },
+      this.clean({ ...song, createdAt: now, updatedAt: now }),
     );
     return ref.id;
+  }
+
+  private clean<T extends object>(obj: T): T {
+    return Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== undefined)) as T;
   }
 
   update(id: string, changes: Partial<Omit<Song, 'id'>>) {
     const uid = this.auth.uid();
     if (!uid) throw new Error('Não autenticado');
     return updateDoc(doc(this.db.firestoreInstance, `users/${uid}/songs/${id}`), {
-      ...changes,
+      ...this.clean(changes),
       updatedAt: Date.now(),
     });
   }
@@ -92,7 +96,7 @@ export class SongService {
     const now = Date.now();
     const ref = await addDoc(
       collection(this.db.firestoreInstance, `users/${uid}/songs`) as CollectionReference<Omit<Song, 'id'>>,
-      {
+      this.clean({
         categoryId: targetCategoryId,
         title: song.title,
         author: song.author,
@@ -101,7 +105,7 @@ export class SongService {
         body: song.body,
         createdAt: now,
         updatedAt: now,
-      },
+      }),
     );
     return ref.id;
   }

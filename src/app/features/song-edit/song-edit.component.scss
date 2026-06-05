@@ -19,7 +19,7 @@ small code {
 
 @media (min-width: 760px) {
   .editor-row.has-preview {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: stretch;
   }
   .editor-row.has-preview .body-label,
@@ -45,7 +45,7 @@ small code {
   flex: 1;
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 4px 16px;
-  overflow-y: auto;
+  overflow-y: auto; overflow-x: hidden;
 }
 
 .hint { color: var(--text-muted); }

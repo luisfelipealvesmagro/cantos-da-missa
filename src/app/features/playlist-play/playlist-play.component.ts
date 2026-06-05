@@ -77,6 +77,7 @@ export class PlaylistPlayComponent implements OnDestroy {
     this.steps.set(0);
     const s = this.currentSong();
     this.capo.set(s?.capo ?? 0);
+    window.scrollTo(0, 0);
   }
 
   transposeUp()   { this.steps.update((v) => v + 1); }

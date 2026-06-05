@@ -21,7 +21,7 @@
             <span class="pos">{{ i + 1 }}</span>
             <span class="song-info">
               <span class="song-title">{{ song.title }}</span>
-              <span class="song-key">{{ song.originalKey }}</span>
+              <span class="song-key">{{ song.author ? song.author + ' · ' : '' }}{{ song.originalKey }}</span>
             </span>
             <div class="order-btns">
               <button (click)="moveUp(i)" [disabled]="i === 0" aria-label="Mover para cima">
@@ -56,7 +56,7 @@
           <li class="available-item">
             <span class="song-info">
               <span class="song-title">{{ song.title }}</span>
-              <span class="song-key">{{ song.originalKey }}</span>
+              <span class="song-key">{{ song.author ? song.author + ' · ' : '' }}{{ song.originalKey }}</span>
             </span>
             <button class="add-btn" (click)="addSong(song)" aria-label="Adicionar">
               <app-icon name="add" [size]="20" />
