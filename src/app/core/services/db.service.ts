@@ -27,10 +27,14 @@ export class DbService {
     return collection(this.firestore, path);
   }
 
+  /** Signal reativo do UID efetivo — use em toObservable() para queries ao vivo */
+  readonly effectiveUid = this.role.effectiveUid;
+
   get firestoreInstance() {
     return this.firestore;
   }
 
+  /** Valor pontual do UID efetivo — use em operações one-shot (getDoc, addDoc…) */
   get uid() {
     return this.role.effectiveUid();
   }

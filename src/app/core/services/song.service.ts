@@ -25,7 +25,7 @@ export class SongService {
   private auth = inject(AuthService);
 
   byCategory$(categoryId: string): Observable<Song[]> {
-    return toObservable(this.auth.uid).pipe(
+    return toObservable(this.db.effectiveUid).pipe(
       switchMap((uid) => {
         if (!uid) return of([] as Song[]);
         return collectionData<Song>(
@@ -41,7 +41,7 @@ export class SongService {
   }
 
   all$(): Observable<Song[]> {
-    return toObservable(this.auth.uid).pipe(
+    return toObservable(this.db.effectiveUid).pipe(
       switchMap((uid) => {
         if (!uid) return of([] as Song[]);
         return collectionData<Song>(
@@ -53,7 +53,7 @@ export class SongService {
   }
 
   async get(id: string): Promise<Song | undefined> {
-    const uid = this.auth.uid();
+    const uid = this.db.uid;
     if (!uid) return undefined;
     const snap = await getDoc(doc(this.db.firestoreInstance, `users/${uid}/songs/${id}`));
     return snap.exists() ? { id: snap.id, ...(snap.data() as Omit<Song, 'id'>) } : undefined;

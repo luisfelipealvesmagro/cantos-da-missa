@@ -25,7 +25,7 @@ export class CategoryService {
   private auth = inject(AuthService);
 
   readonly categories = toSignal(
-    toObservable(this.auth.uid).pipe(
+    toObservable(this.db.effectiveUid).pipe(
       switchMap((uid) => {
         if (!uid) return of([] as Category[]);
         return collectionData<Category>(
@@ -41,7 +41,7 @@ export class CategoryService {
   );
 
   async get(id: string): Promise<Category | undefined> {
-    const uid = this.auth.uid();
+    const uid = this.db.uid;
     if (!uid) return undefined;
     const snap = await getDoc(doc(this.db.firestoreInstance, `users/${uid}/categories/${id}`));
     return snap.exists() ? { id: snap.id, ...(snap.data() as Omit<Category, 'id'>) } : undefined;

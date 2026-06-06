@@ -23,7 +23,7 @@ export class PlaylistService {
   private auth = inject(AuthService);
 
   all$(): Observable<Playlist[]> {
-    return toObservable(this.auth.uid).pipe(
+    return toObservable(this.db.effectiveUid).pipe(
       switchMap((uid) => {
         if (!uid) return of([] as Playlist[]);
         return collectionData<Playlist>(
@@ -38,7 +38,7 @@ export class PlaylistService {
   }
 
   async get(id: string): Promise<Playlist | undefined> {
-    const uid = this.auth.uid();
+    const uid = this.db.uid;
     if (!uid) return undefined;
     const snap = await getDoc(doc(this.db.firestoreInstance, `users/${uid}/playlists/${id}`));
     return snap.exists() ? { id: snap.id, ...(snap.data() as Omit<Playlist, 'id'>) } : undefined;
