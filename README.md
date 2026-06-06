@@ -14,6 +14,21 @@ Instala no celular/tablet/notebook como PWA, sincroniza tudo via **Firestore** c
 - **Tema claro/escuro** (respeita a preferência do sistema, com alternância manual).
 - **Backup**: exporta/importa toda a base como JSON.
 
+## Sistema de papéis (Músico / Cantor)
+
+O app diferencia dois papéis:
+
+| Papel | O que pode fazer |
+|---|---|
+| **Músico** | Acesso completo — cria, edita, exclui músicas, categorias e playlists. Gerencia quais cantores têm acesso. |
+| **Cantor** | Acesso somente-leitura às músicas e playlists do músico (visualizador, transposição, auto-scroll). |
+
+- O **músico** é identificado pelo e-mail fixo configurado em `environment.musicoEmail`.
+- O músico adiciona/remove cantores autorizados pela tela de acesso, informando os e-mails deles.
+- Cantores leem os dados do músico via `effectiveUid` — eles não têm coleção própria no Firestore.
+- As regras do Firestore (`firestore.rules`) garantem que cantores só leem, nunca escrevem.
+- Usuários sem papel reconhecido veem a tela **"Cantor Access"** (aguardando liberação).
+
 ## Rodando
 
 ```bash
@@ -35,9 +50,12 @@ npx http-server -p 8080 dist/cantos-da-missa/browser
 src/app/
 ├── core/
 │   ├── models/        Category, Song
+│   ├── guards/
+│   │   └── role.guard.ts          bloqueia rotas de edição para cantores
 │   └── services/
-│       ├── db.service.ts          referências às coleções Firestore do usuário
+│       ├── db.service.ts          referências às coleções Firestore (usa effectiveUid)
 │       ├── auth.service.ts        Firebase Auth (login com Google)
+│       ├── role.service.ts        papéis músico/cantor, effectiveUid, gestão de cantores
 │       ├── category.service.ts    CRUD de categorias (signals via liveQuery)
 │       ├── song.service.ts        CRUD de músicas (Firestore quando logado)
 │       ├── playlist.service.ts    CRUD de playlists
@@ -50,14 +68,15 @@ src/app/
 │   ├── icon/          wrapper de Material Symbols
 │   └── chord-sheet/   renderiza a cifra com transposição reativa
 └── features/
-    ├── login/         autenticação Google
-    ├── categories/    tela inicial
-    ├── song-list/     músicas da categoria (com busca)
-    ├── song-view/     visualizador (tom, capo, fonte, auto-scroll)
-    ├── song-edit/     editor com preview
-    ├── playlists/     lista de playlists
-    ├── playlist-edit/ montagem e reordenação de músicas
-    └── playlist-play/ modo apresentação da playlist
+    ├── login/             autenticação Google
+    ├── cantor-access/     tela de acesso negado / aguardando liberação
+    ├── categories/        tela inicial
+    ├── song-list/         músicas da categoria (com busca)
+    ├── song-view/         visualizador (tom, capo, fonte, auto-scroll)
+    ├── song-edit/         editor com preview
+    ├── playlists/         lista de playlists
+    ├── playlist-edit/     montagem e reordenação de músicas
+    └── playlist-play/     modo apresentação da playlist
 ```
 
 ## Deploy (Firebase Hosting)

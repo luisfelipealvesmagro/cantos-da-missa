@@ -4,10 +4,10 @@
       @case ('blank') { <div class="blank"></div> }
       @case ('label') { <div class="label">{{ line.label }}</div> }
       @case ('lyric') {
-        <div class="line">
+        <div class="line" [class.lyrics-only]="lyricsOnly()">
           @for (seg of line.segments; track $index) {
             <span class="seg">
-              <span class="chord">{{ seg.chord }}</span>
+              @if (!lyricsOnly()) { <span class="chord">{{ seg.chord }}</span> }
               <span class="text">{{ seg.text }}</span>
             </span>
           }

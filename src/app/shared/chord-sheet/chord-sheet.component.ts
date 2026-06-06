@@ -17,6 +17,7 @@ export class ChordSheetComponent {
   transposeSteps = input(0);   // semitons escolhidos pelo usuário (muda o som)
   capo = input(0);             // casa do capotraste (muda só a forma)
   fontScale = input(1);
+  lyricsOnly = input(false);   // modo cantor: mostra só a letra, sem acordes
 
   private lines = computed(() => this.cp.parse(this.body()));
 

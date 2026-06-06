@@ -1,0 +1,10 @@
+<div class="wrap">
+  <app-icon name="lock" [size]="48" class="icon" />
+  <h2>Acesso pendente</h2>
+  <p>Você está logado como:</p>
+  <code class="email">{{ auth.email() }}</code>
+  <p class="hint">Peça ao músico para adicionar este e-mail nas configurações do app.</p>
+  <button class="btn btn-ghost" (click)="signOut()">
+    <app-icon name="logout" [size]="18" /> Sair
+  </button>
+</div>

@@ -10,6 +10,7 @@ export class AuthService {
   readonly user = toSignal(user(this.auth));
   readonly isReady = computed(() => this.user() !== undefined);
   readonly uid = computed(() => this.user()?.uid ?? null);
+  readonly email = computed(() => this.user()?.email ?? null);
   readonly displayName = computed(() => this.user()?.displayName ?? null);
   readonly photoURL = computed(() => this.user()?.photoURL ?? null);
 

@@ -4,10 +4,12 @@
     <a class="btn btn-ghost" routerLink="/playlists">
       <app-icon name="queue_music" [size]="20" /> Playlists
     </a>
-    <button class="btn btn-ghost" (click)="manage.set(!manage())">
-      <app-icon [name]="manage() ? 'done' : 'tune'" [size]="20" />
-      {{ manage() ? 'Concluir' : 'Gerenciar' }}
-    </button>
+    @if (role.isMusico()) {
+      <button class="btn btn-ghost" (click)="manage.set(!manage())">
+        <app-icon [name]="manage() ? 'done' : 'tune'" [size]="20" />
+        {{ manage() ? 'Concluir' : 'Gerenciar' }}
+      </button>
+    }
   </div>
 </section>
 
@@ -58,27 +60,29 @@
   }
 </div>
 
-@if (adding()) {
-  <div class="add-form">
-    <input type="text" placeholder="Nome da categoria"
-           [value]="newName()" (input)="newName.set($any($event.target).value)"
-           (keyup.enter)="saveCategory()" />
-    <div class="icon-picker">
-      @for (ic of iconOptions; track ic) {
-        <button class="icon-opt" [class.sel]="newIcon() === ic" (click)="newIcon.set(ic)" [attr.aria-label]="ic">
-          <app-icon [name]="ic" [size]="22" />
-        </button>
-      }
+@if (role.isMusico()) {
+  @if (adding()) {
+    <div class="add-form">
+      <input type="text" placeholder="Nome da categoria"
+             [value]="newName()" (input)="newName.set($any($event.target).value)"
+             (keyup.enter)="saveCategory()" />
+      <div class="icon-picker">
+        @for (ic of iconOptions; track ic) {
+          <button class="icon-opt" [class.sel]="newIcon() === ic" (click)="newIcon.set(ic)" [attr.aria-label]="ic">
+            <app-icon [name]="ic" [size]="22" />
+          </button>
+        }
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" (click)="adding.set(false)">Cancelar</button>
+        <button class="btn btn-primary" (click)="saveCategory()">Salvar</button>
+      </div>
     </div>
-    <div class="form-actions">
-      <button class="btn btn-ghost" (click)="adding.set(false)">Cancelar</button>
-      <button class="btn btn-primary" (click)="saveCategory()">Salvar</button>
-    </div>
-  </div>
-} @else {
-  <button class="add-cat" (click)="adding.set(true)">
-    <app-icon name="add" [size]="20" /> Nova categoria
-  </button>
+  } @else {
+    <button class="add-cat" (click)="adding.set(true)">
+      <app-icon name="add" [size]="20" /> Nova categoria
+    </button>
+  }
 }
 
 <p class="total-songs">{{ totalSongs() }} {{ totalSongs() === 1 ? 'música' : 'músicas' }} no total</p>
@@ -91,4 +95,37 @@
       <input type="file" accept="application/json" hidden (change)="onImport($event)" />
     </label>
   </footer>
+
+  <section class="cantores-section">
+    <h3 class="cantores-title"><app-icon name="group" [size]="18" /> Cantores com acesso</h3>
+    @if (role.cantorEmails().length === 0) {
+      <p class="cantores-empty">Nenhum cantor adicionado ainda.</p>
+    } @else {
+      <ul class="cantores-list">
+        @for (email of role.cantorEmails(); track email) {
+          <li class="cantor-item">
+            <span class="cantor-email">{{ email }}</span>
+            <button class="icon-btn-sm" (click)="removeCantor(email)" aria-label="Remover cantor">
+              <app-icon name="close" [size]="16" />
+            </button>
+          </li>
+        }
+      </ul>
+    }
+    @if (addingCantor()) {
+      <div class="cantor-form">
+        <input type="email" placeholder="email@exemplo.com"
+               [value]="newCantorEmail()" (input)="newCantorEmail.set($any($event.target).value)"
+               (keyup.enter)="addCantor()" />
+        <div class="form-actions">
+          <button class="btn btn-ghost" (click)="addingCantor.set(false)">Cancelar</button>
+          <button class="btn btn-primary" (click)="addCantor()">Adicionar</button>
+        </div>
+      </div>
+    } @else {
+      <button class="btn btn-ghost cantor-add-btn" (click)="addingCantor.set(true)">
+        <app-icon name="person_add" [size]="18" /> Adicionar cantor
+      </button>
+    }
+  </section>
 }

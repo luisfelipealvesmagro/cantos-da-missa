@@ -5,6 +5,7 @@ import { from, switchMap } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SongService } from '../../core/services/song.service';
 import { CategoryService } from '../../core/services/category.service';
+import { RoleService } from '../../core/services/role.service';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { Song } from '../../core/models/song.model';
 
@@ -20,6 +21,7 @@ export class SongListComponent {
   private route = inject(ActivatedRoute);
   private songService = inject(SongService);
   readonly categoryService = inject(CategoryService);
+  protected role = inject(RoleService);
 
   categoryId = toSignal(this.route.paramMap.pipe(map((p) => p.get('id') ?? '')), { initialValue: '' });
 

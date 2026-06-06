@@ -1,11 +1,17 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
       import('./features/login/login.component').then((m) => m.LoginComponent),
+  },
+  {
+    path: 'cantor-acesso',
+    loadComponent: () =>
+      import('./features/cantor-access/cantor-access.component').then((m) => m.CantorAccessComponent),
   },
   {
     path: '',
@@ -21,13 +27,13 @@ export const routes: Routes = [
   },
   {
     path: 'playlists/nova',
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
     loadComponent: () =>
       import('./features/playlist-edit/playlist-edit.component').then((m) => m.PlaylistEditComponent),
   },
   {
     path: 'playlists/:id/editar',
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
     loadComponent: () =>
       import('./features/playlist-edit/playlist-edit.component').then((m) => m.PlaylistEditComponent),
   },
@@ -45,13 +51,13 @@ export const routes: Routes = [
   },
   {
     path: 'musica/nova/:categoryId',
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
     loadComponent: () =>
       import('./features/song-edit/song-edit.component').then((m) => m.SongEditComponent),
   },
   {
     path: 'musica/:id/editar',
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
     loadComponent: () =>
       import('./features/song-edit/song-edit.component').then((m) => m.SongEditComponent),
   },

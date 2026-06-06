@@ -6,6 +6,7 @@ import { CategoryService } from '../../core/services/category.service';
 import { SongService } from '../../core/services/song.service';
 import { BackupService } from '../../core/services/backup.service';
 import { SeedService } from '../../core/services/seed.service';
+import { RoleService } from '../../core/services/role.service';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { Category } from '../../core/models/category.model';
 
@@ -22,6 +23,7 @@ export class CategoriesComponent implements OnInit {
   private songService = inject(SongService);
   private backup = inject(BackupService);
   private seed = inject(SeedService);
+  protected role = inject(RoleService);
 
   ngOnInit() { this.seed.ensureSeed(); }
 
@@ -85,6 +87,24 @@ export class CategoriesComponent implements OnInit {
     if (confirm(`Excluir "${name}" e todas as suas cifras?`)) {
       if (this.editingId() === id) this.editingId.set(null);
       await this.categoryService.remove(id);
+    }
+  }
+
+  // Gerenciamento de cantores (músico only)
+  newCantorEmail = signal('');
+  addingCantor = signal(false);
+
+  async addCantor() {
+    const email = this.newCantorEmail().trim();
+    if (!email) return;
+    await this.role.addCantorEmail(email);
+    this.newCantorEmail.set('');
+    this.addingCantor.set(false);
+  }
+
+  async removeCantor(email: string) {
+    if (confirm(`Remover "${email}" dos cantores?`)) {
+      await this.role.removeCantorEmail(email);
     }
   }
 

@@ -83,6 +83,32 @@
 .backup { display: flex; gap: 10px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
 .backup .btn { color: var(--text-muted); font-size: 14px; }
 
+.cantores-section {
+  margin-top: 24px; padding: 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); display: grid; gap: 12px;
+}
+.cantores-title {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-size: 1rem; font-weight: 500;
+  color: var(--text); margin: 0;
+}
+.cantores-empty { font-size: .9rem; color: var(--text-muted); margin: 0; }
+.cantores-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.cantor-item {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface-2); border-radius: var(--radius-sm); padding: 8px 12px;
+}
+.cantor-email { font-family: var(--font-mono); font-size: .9rem; word-break: break-all; }
+.icon-btn-sm {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 4px; flex-shrink: 0;
+  color: var(--danger);
+  &:hover { background: var(--surface); }
+}
+.cantor-form { display: grid; gap: 12px; }
+.cantor-add-btn { font-size: .9rem; color: var(--primary-2); }
+
 .user-menu { display: flex; align-items: center; gap: 6px; }
 .avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
 .btn-icon { padding: 6px; }

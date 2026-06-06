@@ -22,18 +22,20 @@
             <span class="info">
               <span class="t">{{ song.title }}</span>
               <span class="meta">
-                Tom: {{ song.originalKey }}{{ song.capo ? ' · capo ' + song.capo : '' }}
+                @if (role.isMusico()) { Tom: {{ song.originalKey }}{{ song.capo ? ' · capo ' + song.capo : '' }} }
                 {{ song.author ? ' · ' + song.author : '' }}
               </span>
             </span>
             <app-icon name="chevron_right" [size]="22" class="chev" />
           </a>
-          <button class="clone-btn" [class.active]="activeCloneId() === song.id"
-                  (click)="toggleClone(song.id!)" [attr.aria-label]="'Clonar ' + song.title">
-            <app-icon name="content_copy" [size]="18" />
-          </button>
+          @if (role.isMusico()) {
+            <button class="clone-btn" [class.active]="activeCloneId() === song.id"
+                    (click)="toggleClone(song.id!)" [attr.aria-label]="'Clonar ' + song.title">
+              <app-icon name="content_copy" [size]="18" />
+            </button>
+          }
         </div>
-        @if (activeCloneId() === song.id) {
+        @if (role.isMusico() && activeCloneId() === song.id) {
           <div class="clone-picker">
             <p class="picker-label">Clonar para qual categoria?</p>
             <div class="picker-cats">
@@ -53,9 +55,14 @@
     }
   </ul>
 } @else {
-  <p class="empty">Nenhuma música ainda. Que tal cadastrar a primeira?</p>
+  <p class="empty">
+    @if (role.isMusico()) { Nenhuma música ainda. Que tal cadastrar a primeira? }
+    @else { Nenhuma música nesta categoria. }
+  </p>
 }
 
-<a class="add" [routerLink]="['/musica/nova', categoryId()]">
-  <app-icon name="add" [size]="20" /> Cadastrar cifra
-</a>
+@if (role.isMusico()) {
+  <a class="add" [routerLink]="['/musica/nova', categoryId()]">
+    <app-icon name="add" [size]="20" /> Cadastrar cifra
+  </a>
+}

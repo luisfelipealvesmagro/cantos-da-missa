@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Configuração global: qual UID é o músico e quais e-mails são cantores
+    match /app/config {
+      allow read: if request.auth != null;
+      // Somente o músico (pelo e-mail) pode escrever neste documento
+      allow write: if request.auth.token.email == 'luisfelipealvesm@gmail.com';
+    }
+
+    // Dados do usuário (categorias, músicas, playlists)
+    match /users/{uid}/{document=**} {
+      // Dono: acesso completo
+      allow read, write: if request.auth.uid == uid;
+
+      // Cantores autorizados: leitura dos dados do músico
+      allow read: if request.auth != null
+                   && exists(/databases/$(database)/documents/app/config)
+                   && uid == get(/databases/$(database)/documents/app/config).data.musicoUid
+                   && request.auth.token.email in get(/databases/$(database)/documents/app/config).data.cantorEmails;
+    }
+  }
+}

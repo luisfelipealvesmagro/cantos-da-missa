@@ -2,6 +2,7 @@
 // e preencha com suas credenciais do Firebase Console.
 export const environment = {
   production: false,
+  musicoEmail: 'seu-email@gmail.com', // e-mail do usuário com acesso completo (músico/admin)
   firebase: {
     apiKey: 'COLE_AQUI',
     authDomain: 'SEU_PROJETO.firebaseapp.com',
