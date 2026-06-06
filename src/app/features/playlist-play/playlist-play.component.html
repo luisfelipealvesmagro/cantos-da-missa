@@ -18,23 +18,25 @@
   </div>
 
   <div class="toolbar">
-    <div class="group">
-      <span class="lbl">Tom</span>
-      <button class="btn-icon" (click)="transposeDown()" aria-label="Abaixar meio tom"><app-icon name="remove" [size]="20" /></button>
-      <select class="key" (change)="selectKey($any($event.target).value)" aria-label="Escolher tom">
-        @for (k of keys; track k) {
-          <option [value]="k" [selected]="k === currentKey()">{{ k }}</option>
-        }
-      </select>
-      <button class="btn-icon" (click)="transposeUp()" aria-label="Subir meio tom"><app-icon name="add" [size]="20" /></button>
-    </div>
+    @if (role.isMusico()) {
+      <div class="group">
+        <span class="lbl">Tom</span>
+        <button class="btn-icon" (click)="transposeDown()" aria-label="Abaixar meio tom"><app-icon name="remove" [size]="20" /></button>
+        <select class="key" (change)="selectKey($any($event.target).value)" aria-label="Escolher tom">
+          @for (k of keys; track k) {
+            <option [value]="k" [selected]="k === currentKey()">{{ k }}</option>
+          }
+        </select>
+        <button class="btn-icon" (click)="transposeUp()" aria-label="Subir meio tom"><app-icon name="add" [size]="20" /></button>
+      </div>
 
-    <div class="group">
-      <span class="lbl">Capo</span>
-      <button class="btn-icon" (click)="capoDown()" aria-label="Diminuir capotraste"><app-icon name="remove" [size]="20" /></button>
-      <span class="val">{{ capo() === 0 ? '—' : capo() }}</span>
-      <button class="btn-icon" (click)="capoUp()" aria-label="Aumentar capotraste"><app-icon name="add" [size]="20" /></button>
-    </div>
+      <div class="group">
+        <span class="lbl">Capo</span>
+        <button class="btn-icon" (click)="capoDown()" aria-label="Diminuir capotraste"><app-icon name="remove" [size]="20" /></button>
+        <span class="val">{{ capo() === 0 ? '—' : capo() }}</span>
+        <button class="btn-icon" (click)="capoUp()" aria-label="Aumentar capotraste"><app-icon name="add" [size]="20" /></button>
+      </div>
+    }
 
     <div class="group scroll">
       <button class="btn-icon" (click)="fontDown()" aria-label="Diminuir fonte"><app-icon name="text_decrease" [size]="20" /></button>
@@ -47,7 +49,7 @@
     </div>
   </div>
 
-  <app-chord-sheet [body]="song.body" [transposeSteps]="steps()" [capo]="capo()" [fontScale]="fontScale()" />
+  <app-chord-sheet [body]="song.body" [transposeSteps]="steps()" [capo]="capo()" [fontScale]="fontScale()" [lyricsOnly]="!role.isMusico()" />
 
   <!-- Barra de navegação prev / next -->
   <nav class="nav-bar">

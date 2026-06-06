@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PlaylistService } from '../../core/services/playlist.service';
 import { SongService } from '../../core/services/song.service';
 import { TransposeService } from '../../core/services/transpose.service';
+import { RoleService } from '../../core/services/role.service';
 import { ChordSheetComponent } from '../../shared/chord-sheet/chord-sheet.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { Song } from '../../core/models/song.model';
@@ -22,6 +23,7 @@ export class PlaylistPlayComponent implements OnDestroy {
   private playlistService = inject(PlaylistService);
   private songService = inject(SongService);
   private tp = inject(TransposeService);
+  protected role = inject(RoleService);
 
   playlist = signal<Playlist | undefined>(undefined);
   songs = signal<Song[]>([]);
