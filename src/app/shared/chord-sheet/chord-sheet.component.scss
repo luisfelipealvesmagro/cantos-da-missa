@@ -4,11 +4,11 @@
   white-space: pre-wrap;
 }
 .line { display: flex; flex-wrap: wrap; margin-bottom: .55em; }
-.seg { display: inline-flex; flex-direction: column; white-space: pre; }
+.seg { display: inline-flex; flex-direction: column; white-space: pre; max-width: 100%; }
 
 // No modo cantor, a linha é lida inline (sem a linha de acordes acima)
 .line.lyrics-only { display: block; }
-.line.lyrics-only .seg { display: inline; }
+.line.lyrics-only .seg { display: inline; white-space: pre-wrap; }
 .chord {
   color: var(--accent-2);
   font-weight: 500;
