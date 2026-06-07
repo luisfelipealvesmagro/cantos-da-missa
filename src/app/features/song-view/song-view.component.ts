@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SongService } from '../../core/services/song.service';
 import { TransposeService } from '../../core/services/transpose.service';
 import { RoleService } from '../../core/services/role.service';
+import { PreferencesService } from '../../core/services/preferences.service';
 import { ChordSheetComponent } from '../../shared/chord-sheet/chord-sheet.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { Song } from '../../core/models/song.model';
@@ -21,11 +22,12 @@ export class SongViewComponent implements OnDestroy {
   private songService = inject(SongService);
   private tp = inject(TransposeService);
   protected role = inject(RoleService);
+  protected prefs = inject(PreferencesService);
 
   song = signal<Song | undefined>(undefined);
   steps = signal(0);
   capo = signal(0);
-  fontScale = signal(1);
+  get fontScale() { return this.prefs.fontScale; }
 
   keys = this.tp.keys;
   currentKey = computed(() => {
@@ -54,8 +56,8 @@ export class SongViewComponent implements OnDestroy {
   }
   capoUp() { this.capo.update((v) => Math.min(11, v + 1)); }
   capoDown() { this.capo.update((v) => Math.max(0, v - 1)); }
-  fontUp() { this.fontScale.update((v) => Math.min(1.8, +(v + 0.1).toFixed(1))); }
-  fontDown() { this.fontScale.update((v) => Math.max(0.7, +(v - 0.1).toFixed(1))); }
+  fontUp() { this.prefs.fontUp(); }
+  fontDown() { this.prefs.fontDown(); }
 
   toggleScroll() {
     this.scrolling() ? this.stopScroll() : this.startScroll();
