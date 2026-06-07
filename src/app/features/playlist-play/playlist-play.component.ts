@@ -4,6 +4,7 @@ import { PlaylistService } from '../../core/services/playlist.service';
 import { SongService } from '../../core/services/song.service';
 import { TransposeService } from '../../core/services/transpose.service';
 import { RoleService } from '../../core/services/role.service';
+import { WakeLockService } from '../../core/services/wake-lock.service';
 import { ChordSheetComponent } from '../../shared/chord-sheet/chord-sheet.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { Song } from '../../core/models/song.model';
@@ -23,6 +24,7 @@ export class PlaylistPlayComponent implements OnDestroy {
   private playlistService = inject(PlaylistService);
   private songService = inject(SongService);
   private tp = inject(TransposeService);
+  private wakeLock = inject(WakeLockService);
   protected role = inject(RoleService);
 
   playlist = signal<Playlist | undefined>(undefined);
@@ -51,6 +53,7 @@ export class PlaylistPlayComponent implements OnDestroy {
   private acc = 0;
 
   constructor() {
+    this.wakeLock.acquire();
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     this.playlistService.get(id).then(async (pl) => {
       if (!pl) { this.router.navigate(['/playlists']); return; }
@@ -117,5 +120,5 @@ export class PlaylistPlayComponent implements OnDestroy {
 
   back() { this.router.navigate(['/playlists']); }
 
-  ngOnDestroy() { this.stopScroll(); }
+  ngOnDestroy() { this.stopScroll(); this.wakeLock.release(); }
 }
