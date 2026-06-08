@@ -9,12 +9,11 @@ import {
   deleteField,
   doc,
   getDoc,
-  orderBy,
   query,
   updateDoc,
   where,
 } from '@angular/fire/firestore';
-import { Observable, of, switchMap } from 'rxjs';
+import { Observable, map, of, switchMap } from 'rxjs';
 import { AuthService } from './auth.service';
 import { DbService } from './db.service';
 import { Song } from '../models/song.model';
@@ -32,10 +31,9 @@ export class SongService {
           query(
             collection(this.db.firestoreInstance, `users/${uid}/songs`) as CollectionReference<Song>,
             where('categoryId', '==', categoryId),
-            orderBy('title'),
           ),
           { idField: 'id' },
-        );
+        ).pipe(map(songs => songs.slice().sort((a, b) => a.title.localeCompare(b.title, 'pt'))));
       }),
     );
   }
