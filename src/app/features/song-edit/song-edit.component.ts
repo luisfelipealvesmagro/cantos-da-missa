@@ -34,9 +34,11 @@ export class SongEditComponent {
   capo = signal(0);
   body = signal('');
   showPreview = signal(true);
+  transposeBody = signal(true);
 
   isEdit = computed(() => this.editingId() !== null);
   canSave = computed(() => this.title().trim() !== '' && this.categoryId() !== null);
+  hasBodyChords = computed(() => /\[[A-G]/.test(this.body()));
 
   constructor() {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -55,6 +57,19 @@ export class SongEditComponent {
     } else if (catParam) {
       this.categoryId.set(catParam);
     }
+  }
+
+  onKeyChange(newKey: string): void {
+    const fromKey = this.originalKey();
+    if (this.transposeBody() && this.hasBodyChords() && fromKey !== newKey) {
+      const steps = this.tp.semitonesBetween(fromKey, newKey);
+      const transposed = this.body().replace(/\[([^\]]+)\]/g, (_, chord) => {
+        if (!this.tp.isChord(chord)) return `[${chord}]`;
+        return `[${this.tp.transposeChord(chord, steps)}]`;
+      });
+      this.body.set(transposed);
+    }
+    this.originalKey.set(newKey);
   }
 
   convertPasted() {

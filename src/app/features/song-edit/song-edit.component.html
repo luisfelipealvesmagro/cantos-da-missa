@@ -23,8 +23,16 @@
   </div>
 
   <div class="row">
-    <label>Tom original
-      <select (change)="originalKey.set($any($event.target).value)">
+    <label>
+      <span class="key-label-head">
+        Tom original
+        <span class="transpose-toggle" [class.disabled]="!hasBodyChords()">
+          <input type="checkbox" [checked]="transposeBody()" [disabled]="!hasBodyChords()"
+            (change)="transposeBody.set($any($event.target).checked)" />
+          Transpor cifra
+        </span>
+      </span>
+      <select (change)="onKeyChange($any($event.target).value)">
         @for (k of keys; track k) {
           <option [value]="k" [selected]="k === originalKey()">{{ k }}</option>
         }

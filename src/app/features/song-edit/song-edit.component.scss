@@ -7,6 +7,16 @@ label { display: grid; gap: 6px; font-size: 14px; color: var(--text-muted); }
 label input, label select, label textarea { color: var(--text); }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
+.key-label-head {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.transpose-toggle {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; cursor: pointer;
+  input[type="checkbox"] { cursor: pointer; width: 13px; height: 13px; accent-color: var(--primary-2); }
+  &.disabled { opacity: .4; cursor: default; input { cursor: default; } }
+}
+
 .body-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .mini { padding: 6px 10px; font-size: 13px; color: var(--accent-2); }
 small { color: var(--text-muted); }
