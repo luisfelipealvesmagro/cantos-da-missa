@@ -8,6 +8,7 @@ import { CategoryService } from '../../core/services/category.service';
 import { RoleService } from '../../core/services/role.service';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { Song } from '../../core/models/song.model';
+import { normalize } from '../../shared/utils/normalize';
 
 @Component({
   selector: 'app-song-list',
@@ -37,11 +38,11 @@ export class SongListComponent {
 
   query = signal('');
   filtered = computed(() => {
-    const q = this.query().trim().toLowerCase();
+    const q = normalize(this.query().trim());
     const list = this.songs();
     if (!q) return list;
     return list.filter((s) =>
-      s.title.toLowerCase().includes(q) || (s.author ?? '').toLowerCase().includes(q));
+      normalize(s.title).includes(q) || normalize(s.author ?? '').includes(q));
   });
 
   otherCategories = computed(() =>

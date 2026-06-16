@@ -7,6 +7,7 @@ import { SongService } from '../../core/services/song.service';
 import { CategoryService } from '../../core/services/category.service';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { Song } from '../../core/models/song.model';
+import { normalize } from '../../shared/utils/normalize';
 
 @Component({
   selector: 'app-playlist-edit',
@@ -45,10 +46,10 @@ export class PlaylistEditComponent {
 
   availableSongs = computed(() => {
     const ids = new Set(this.songIds());
-    const q = this.query().trim().toLowerCase();
+    const q = normalize(this.query().trim());
     return this.allSongs()
       .filter((s) => !ids.has(s.id!))
-      .filter((s) => !q || s.title.toLowerCase().includes(q) || (s.author ?? '').toLowerCase().includes(q));
+      .filter((s) => !q || normalize(s.title).includes(q) || normalize(s.author ?? '').includes(q));
   });
 
   constructor() {
