@@ -4,6 +4,7 @@ import { SongService } from '../../core/services/song.service';
 import { TransposeService } from '../../core/services/transpose.service';
 import { RoleService } from '../../core/services/role.service';
 import { PreferencesService } from '../../core/services/preferences.service';
+import { WakeLockService } from '../../core/services/wake-lock.service';
 import { ChordSheetComponent } from '../../shared/chord-sheet/chord-sheet.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { Song } from '../../core/models/song.model';
@@ -23,6 +24,7 @@ export class SongViewComponent implements OnDestroy {
   private tp = inject(TransposeService);
   protected role = inject(RoleService);
   protected prefs = inject(PreferencesService);
+  private wakeLock = inject(WakeLockService);
 
   song = signal<Song | undefined>(undefined);
   steps = signal(0);
@@ -41,6 +43,7 @@ export class SongViewComponent implements OnDestroy {
   private acc = 0;
 
   constructor() {
+    this.wakeLock.acquire();
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     this.songService.get(id).then((s) => {
       this.song.set(s);
@@ -89,5 +92,5 @@ export class SongViewComponent implements OnDestroy {
     }
   }
 
-  ngOnDestroy() { this.stopScroll(); }
+  ngOnDestroy() { this.stopScroll(); this.wakeLock.release(); }
 }
