@@ -1,0 +1,32 @@
+<div class="head">
+  <a routerLink="/" class="back" aria-label="Voltar"><app-icon name="arrow_back" [size]="24" /></a>
+  <h2>Buscar música</h2>
+</div>
+
+<div class="search">
+  <app-icon name="search" [size]="20" />
+  <input type="text" placeholder="Buscar música ou autor…"
+         [value]="query()" (input)="query.set($any($event.target).value)" autofocus />
+</div>
+
+@if (query().trim()) {
+  @if (results().length) {
+    <ul class="list">
+      @for (r of results(); track r.song.id) {
+        <li>
+          <a class="row" [routerLink]="['/musica', r.song.id]">
+            <span class="info">
+              <span class="t">{{ r.song.title }}</span>
+              <span class="meta">{{ r.song.author ? r.song.author + ' · ' : '' }}{{ r.categoryName }}</span>
+            </span>
+            <app-icon name="chevron_right" [size]="22" class="chev" />
+          </a>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="empty">Nenhuma música encontrada.</p>
+  }
+} @else {
+  <p class="empty">Digite um título ou nome de autor para buscar.</p>
+}

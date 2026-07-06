@@ -20,6 +20,12 @@ export const routes: Routes = [
       import('./features/categories/categories.component').then((m) => m.CategoriesComponent),
   },
   {
+    path: 'busca',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/search/search.component').then((m) => m.SearchComponent),
+  },
+  {
     path: 'playlists',
     canActivate: [authGuard],
     loadComponent: () =>
