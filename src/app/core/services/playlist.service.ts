@@ -55,6 +55,19 @@ export class PlaylistService {
     return ref.id;
   }
 
+  async duplicate(id: string, newName: string): Promise<string> {
+    const uid = this.auth.uid();
+    if (!uid) throw new Error('Não autenticado');
+    const source = await this.get(id);
+    if (!source) throw new Error('Playlist não encontrada');
+    const now = Date.now();
+    const ref = await addDoc(
+      collection(this.db.firestoreInstance, `users/${uid}/playlists`) as CollectionReference<Omit<Playlist, 'id'>>,
+      { name: newName.trim(), songIds: [...source.songIds], createdAt: now, updatedAt: now },
+    );
+    return ref.id;
+  }
+
   update(id: string, changes: Partial<Omit<Playlist, 'id'>>) {
     const uid = this.auth.uid();
     if (!uid) throw new Error('Não autenticado');

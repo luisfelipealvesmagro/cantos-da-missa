@@ -23,6 +23,9 @@
             <a class="icon-btn" [routerLink]="['/playlists', pl.id, 'editar']" aria-label="Editar">
               <app-icon name="edit" [size]="18" />
             </a>
+            <button class="icon-btn" (click)="clone(pl.id!, pl.name)" aria-label="Clonar">
+              <app-icon name="content_copy" [size]="18" />
+            </button>
             <button class="icon-btn danger" (click)="remove(pl.id!, pl.name)" aria-label="Excluir">
               <app-icon name="delete" [size]="18" />
             </button>
