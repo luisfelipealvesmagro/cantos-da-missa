@@ -59,6 +59,7 @@ small code {
 }
 
 .hint { color: var(--text-muted); }
+.hint-error { color: var(--danger); }
 
 .footer-row {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;

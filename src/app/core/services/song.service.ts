@@ -105,6 +105,7 @@ export class SongService {
         originalKey: song.originalKey,
         capo: song.capo,
         body: song.body,
+        videoUrl: song.videoUrl,
         createdAt: now,
         updatedAt: now,
       }),

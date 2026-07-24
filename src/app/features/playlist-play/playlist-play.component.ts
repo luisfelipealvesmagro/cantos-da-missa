@@ -8,13 +8,15 @@ import { WakeLockService } from '../../core/services/wake-lock.service';
 import { PreferencesService } from '../../core/services/preferences.service';
 import { ChordSheetComponent } from '../../shared/chord-sheet/chord-sheet.component';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { VideoPlayerComponent } from '../../shared/video-player/video-player.component';
+import { extractYoutubeId } from '../../shared/utils/youtube';
 import { Song } from '../../core/models/song.model';
 import { Playlist } from '../../core/models/playlist.model';
 
 @Component({
   selector: 'app-playlist-play',
   standalone: true,
-  imports: [ChordSheetComponent, IconComponent],
+  imports: [ChordSheetComponent, IconComponent, VideoPlayerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './playlist-play.component.html',
   styleUrl: './playlist-play.component.scss',
@@ -37,6 +39,7 @@ export class PlaylistPlayComponent implements OnDestroy {
   get fontScale() { return this.prefs.fontScale; }
   showControls = signal(true);
   showSongPicker = signal(false);
+  showVideo = signal(false);
 
   keys = this.tp.keys;
 
@@ -47,6 +50,7 @@ export class PlaylistPlayComponent implements OnDestroy {
     const s = this.currentSong();
     return s ? this.tp.transposeChord(s.originalKey, this.steps()) : '';
   });
+  hasVideo = computed(() => !!extractYoutubeId(this.currentSong()?.videoUrl ?? ''));
 
   // auto-scroll
   scrolling = signal(false);
@@ -92,6 +96,7 @@ export class PlaylistPlayComponent implements OnDestroy {
     this.steps.set(0);
     const s = this.currentSong();
     this.capo.set(s?.capo ?? 0);
+    this.showVideo.set(false);
     window.scrollTo(0, 0);
   }
 

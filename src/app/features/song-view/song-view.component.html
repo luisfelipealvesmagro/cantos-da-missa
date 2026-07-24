@@ -5,6 +5,9 @@
       <h2>{{ s.title }}</h2>
       @if (s.author) { <span class="author">{{ s.author }}</span> }
     </div>
+    @if (hasVideo()) {
+      <button class="video-btn" (click)="showVideo.set(true)" aria-label="Assistir vídeo"><app-icon name="smart_display" [size]="22" /></button>
+    }
     @if (role.isMusico()) {
       <a [routerLink]="['/musica', s.id, 'editar']" class="edit" aria-label="Editar"><app-icon name="edit" [size]="22" /></a>
     }
@@ -49,6 +52,8 @@
       <button class="btn btn-danger" (click)="deleteSong()"><app-icon name="delete" [size]="20" /> Excluir</button>
     </div>
   }
+
+  <app-video-player [videoUrl]="s.videoUrl" [open]="showVideo()" (closed)="showVideo.set(false)" />
 } @else {
   <p class="loading">Carregando…</p>
 }

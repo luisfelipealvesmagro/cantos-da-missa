@@ -15,6 +15,9 @@
   <div class="song-header">
     <h2>{{ song.title }}</h2>
     @if (song.author) { <span class="author">{{ song.author }}</span> }
+    @if (hasVideo()) {
+      <button class="video-btn" (click)="showVideo.set(true)" aria-label="Assistir vídeo"><app-icon name="smart_display" [size]="20" /></button>
+    }
   </div>
 
   <div class="toolbar">
@@ -91,6 +94,8 @@
       </ul>
     </div>
   }
+
+  <app-video-player [videoUrl]="song.videoUrl" [open]="showVideo()" (closed)="showVideo.set(false)" />
 } @else if (songs().length === 0 && playlist()) {
   <p class="empty">Carregando músicas…</p>
 }

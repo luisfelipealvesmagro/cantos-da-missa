@@ -22,6 +22,11 @@
     </label>
   </div>
 
+  <label>Link do vídeo (YouTube)
+    <input type="url" [value]="videoUrl()" (input)="videoUrl.set($any($event.target).value)" placeholder="opcional — https://youtube.com/watch?v=..." />
+    @if (videoUrlInvalid()) { <small class="hint-error">Link do YouTube inválido</small> }
+  </label>
+
   <div class="row">
     <label>
       <span class="key-label-head">

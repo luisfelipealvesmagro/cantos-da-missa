@@ -7,12 +7,14 @@ import { PreferencesService } from '../../core/services/preferences.service';
 import { WakeLockService } from '../../core/services/wake-lock.service';
 import { ChordSheetComponent } from '../../shared/chord-sheet/chord-sheet.component';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { VideoPlayerComponent } from '../../shared/video-player/video-player.component';
+import { extractYoutubeId } from '../../shared/utils/youtube';
 import { Song } from '../../core/models/song.model';
 
 @Component({
   selector: 'app-song-view',
   standalone: true,
-  imports: [RouterLink, ChordSheetComponent, IconComponent],
+  imports: [RouterLink, ChordSheetComponent, IconComponent, VideoPlayerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './song-view.component.html',
   styleUrl: './song-view.component.scss',
@@ -29,6 +31,7 @@ export class SongViewComponent implements OnDestroy {
   song = signal<Song | undefined>(undefined);
   steps = signal(0);
   capo = signal(0);
+  showVideo = signal(false);
   get fontScale() { return this.prefs.fontScale; }
 
   keys = this.tp.keys;
@@ -36,6 +39,7 @@ export class SongViewComponent implements OnDestroy {
     const s = this.song();
     return s ? this.tp.transposeChord(s.originalKey, this.steps()) : '';
   });
+  hasVideo = computed(() => !!extractYoutubeId(this.song()?.videoUrl ?? ''));
 
   scrolling = signal(false);
   speed = signal(3);

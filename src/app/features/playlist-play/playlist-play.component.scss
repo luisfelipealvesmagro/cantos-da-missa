@@ -10,9 +10,10 @@
   &:hover { background: var(--surface-2); color: var(--text); }
 }
 
-.song-header { margin-bottom: 8px; }
+.song-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
 .song-header h2 { font-size: 1.4rem; }
 .author { font-size: 0.9rem; color: var(--text-muted); }
+.video-btn { display: inline-flex; align-items: center; color: var(--text-muted); margin-left: auto; }
 
 .toolbar {
   position: sticky; top: 60px; z-index: 5;

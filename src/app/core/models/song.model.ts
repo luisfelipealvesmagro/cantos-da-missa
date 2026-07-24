@@ -6,6 +6,7 @@ export interface Song {
   originalKey: string;
   capo: number;
   body: string;
+  videoUrl?: string;
   createdAt: number;
   updatedAt: number;
 }

@@ -6,6 +6,7 @@ import { ChordProService } from '../../core/services/chordpro.service';
 import { TransposeService } from '../../core/services/transpose.service';
 import { ChordSheetComponent } from '../../shared/chord-sheet/chord-sheet.component';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { extractYoutubeId } from '../../shared/utils/youtube';
 
 @Component({
   selector: 'app-song-edit',
@@ -33,12 +34,14 @@ export class SongEditComponent {
   originalKey = signal('G');
   capo = signal(0);
   body = signal('');
+  videoUrl = signal('');
   showPreview = signal(true);
   transposeBody = signal(true);
 
   isEdit = computed(() => this.editingId() !== null);
   canSave = computed(() => this.title().trim() !== '' && this.categoryId() !== null);
   hasBodyChords = computed(() => /\[[A-G]/.test(this.body()));
+  videoUrlInvalid = computed(() => this.videoUrl().trim() !== '' && !extractYoutubeId(this.videoUrl()));
 
   constructor() {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -53,6 +56,7 @@ export class SongEditComponent {
         this.originalKey.set(s.originalKey);
         this.capo.set(s.capo ?? 0);
         this.body.set(s.body);
+        this.videoUrl.set(s.videoUrl ?? '');
       });
     } else if (catParam) {
       this.categoryId.set(catParam);
@@ -86,6 +90,7 @@ export class SongEditComponent {
       originalKey: this.originalKey(),
       capo: this.capo(),
       body: this.body(),
+      videoUrl: this.videoUrl().trim() || undefined,
     };
     if (this.isEdit()) {
       await this.songService.update(this.editingId()!, payload);

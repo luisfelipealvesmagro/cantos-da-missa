@@ -44,3 +44,13 @@ Thumbs.db
 # Firebase credentials — não commitar, use environment.example.ts como base
 src/environments/environment.ts
 src/environments/environment.prod.ts
+
+# Skills (npx skills add) — arquivos gerados/symlinks, restauráveis via skills-lock.json
+/.agents
+.claude/skills
+
+# MCP config — contém API keys reais (ex.: CONTEXT7_API_KEY)
+.mcp.json
+
+# Firebase CLI cache
+/.firebase

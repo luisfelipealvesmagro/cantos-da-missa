@@ -1,0 +1,12 @@
+@if (open() && embedUrl()) {
+  <div class="video-backdrop" (click)="close()"></div>
+  <div class="video-modal">
+    <div class="video-head">
+      <span>Vídeo</span>
+      <button class="btn-icon" (click)="close()" aria-label="Fechar"><app-icon name="close" [size]="20" /></button>
+    </div>
+    <div class="video-frame">
+      <iframe [src]="embedUrl()" title="Vídeo da música" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+}

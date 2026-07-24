@@ -1,5 +1,5 @@
 .head { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 12px; }
-.back, .edit { display: inline-flex; color: var(--text-muted); padding-top: 4px; }
+.back, .edit, .video-btn { display: inline-flex; color: var(--text-muted); padding-top: 4px; }
 .titles { flex: 1; }
 h2 { font-size: 24px; line-height: 1.2; }
 .author { font-size: 14px; color: var(--text-muted); }
