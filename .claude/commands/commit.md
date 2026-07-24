@@ -19,6 +19,8 @@ Analise as mudanças staged com `git diff --staged` e crie um commit seguindo Co
 2. Rode `git diff --staged` para ver o que está staged
 3. Se não houver nada staged, rode `git add -A` primeiro e confirme com o usuário
 4. Crie a mensagem de commit ideal
-5. Execute `git commit -m "mensagem"`
+5. Mostre ao usuário um resumo do commit (arquivos alterados e a mensagem/descrição proposta) e peça confirmação antes de commitar
+6. Só após a confirmação, execute `git commit -m "mensagem"`
+7. Depois do commit, pergunte ao usuário se deseja fazer push para o repositório remoto (sim ou não). Se confirmado, execute `git push origin <branch-atual>`, detectando a branch atual com `git branch --show-current`
 
 Contexto adicional do usuário: $ARGUMENTS
