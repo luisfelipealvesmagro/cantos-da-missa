@@ -2,6 +2,10 @@
 
 Este arquivo orienta o Claude Code (claude.ai/code) ao trabalhar com o código deste repositório.
 
+## Estilo de resposta
+
+Toda sessão neste repositório: ativar skill `caveman` nível `full` desde o início, sem precisar pedir.
+
 ## Comandos
 
 ```bash
