@@ -64,10 +64,20 @@
         <span class="dot" [class.active]="i === index()"></span>
       }
     </div>
-    <button class="nav-btn" (click)="next()" [disabled]="isLast()" aria-label="Próxima">
-      <app-icon name="skip_next" [size]="22" />
-    </button>
+    @if (isLast()) {
+      <button class="nav-btn btn-complete" (click)="completeMass()" aria-label="Concluir Missa">
+        <app-icon name="celebration" [size]="22" />
+      </button>
+    } @else {
+      <button class="nav-btn" (click)="next()" aria-label="Próxima">
+        <app-icon name="skip_next" [size]="22" />
+      </button>
+    }
   </nav>
+
+  @if (showMassComplete()) {
+    <app-mass-complete-overlay (closed)="closeMassComplete()" />
+  }
 
   @if (showSongPicker()) {
     <div class="picker-backdrop" (click)="showSongPicker.set(false)"></div>

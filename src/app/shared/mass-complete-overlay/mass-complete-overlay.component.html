@@ -1,0 +1,9 @@
+<div class="overlay" (click)="close()">
+  <canvas #canvas class="confetti-canvas"></canvas>
+  <div class="card" (click)="$event.stopPropagation()">
+    <app-icon name="celebration" [size]="48" />
+    <h2>Missa Concluída!</h2>
+    <p>Ide em paz, levando a alegria do Evangelho!</p>
+    <button class="close-btn" (click)="close()">Fechar</button>
+  </div>
+</div>

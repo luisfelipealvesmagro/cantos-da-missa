@@ -9,6 +9,7 @@ import { PreferencesService } from '../../core/services/preferences.service';
 import { ChordSheetComponent } from '../../shared/chord-sheet/chord-sheet.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { VideoPlayerComponent } from '../../shared/video-player/video-player.component';
+import { MassCompleteOverlayComponent } from '../../shared/mass-complete-overlay/mass-complete-overlay.component';
 import { extractYoutubeId } from '../../shared/utils/youtube';
 import { Song } from '../../core/models/song.model';
 import { Playlist } from '../../core/models/playlist.model';
@@ -16,7 +17,7 @@ import { Playlist } from '../../core/models/playlist.model';
 @Component({
   selector: 'app-playlist-play',
   standalone: true,
-  imports: [ChordSheetComponent, IconComponent, VideoPlayerComponent],
+  imports: [ChordSheetComponent, IconComponent, VideoPlayerComponent, MassCompleteOverlayComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './playlist-play.component.html',
   styleUrl: './playlist-play.component.scss',
@@ -40,6 +41,7 @@ export class PlaylistPlayComponent implements OnDestroy {
   showControls = signal(true);
   showSongPicker = signal(false);
   showVideo = signal(false);
+  showMassComplete = signal(false);
 
   keys = this.tp.keys;
 
@@ -126,6 +128,12 @@ export class PlaylistPlayComponent implements OnDestroy {
   private stopScroll() { this.scrolling.set(false); cancelAnimationFrame(this.rafId); }
 
   back() { this.router.navigate(['/playlists']); }
+
+  completeMass() { this.showMassComplete.set(true); }
+  closeMassComplete() {
+    this.showMassComplete.set(false);
+    this.router.navigate(['/playlists']);
+  }
 
   ngOnDestroy() { this.stopScroll(); this.wakeLock.release(); }
 }

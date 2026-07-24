@@ -54,6 +54,11 @@
   &:disabled { color: var(--text-muted); opacity: 0.4; cursor: not-allowed; }
 }
 
+.btn-complete {
+  background: var(--primary); color: var(--on-primary);
+  &:hover { background: var(--primary-2); }
+}
+
 .nav-center { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: center; max-width: calc(100% - 100px); }
 .dot {
   width: 6px; height: 6px; border-radius: 50%;
