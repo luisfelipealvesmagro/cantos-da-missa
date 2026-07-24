@@ -3,5 +3,4 @@ export interface Category {
   name: string;
   icon: string;
   order: number;
-  system?: boolean;
 }

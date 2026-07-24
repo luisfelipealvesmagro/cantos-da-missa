@@ -16,15 +16,15 @@ export class SeedService {
     if (snap.size > 0) return;
 
     const defaults: Omit<Category, 'id'>[] = [
-      { name: 'Entrada',         icon: 'door_open',          order: 0, system: true },
-      { name: 'Ato Penitencial', icon: 'self_improvement',   order: 1, system: true },
-      { name: 'Glória',          icon: 'auto_awesome',       order: 2, system: true },
-      { name: 'Aclamação',       icon: 'menu_book',          order: 3, system: true },
-      { name: 'Ofertório',       icon: 'redeem',             order: 4, system: true },
-      { name: 'Comunhão',        icon: 'bakery_dining',      order: 5, system: true },
-      { name: 'Pós-Comunhão',    icon: 'volunteer_activism', order: 6, system: true },
-      { name: 'Canto Final',     icon: 'waving_hand',        order: 7, system: true },
-      { name: 'Especiais',       icon: 'star',               order: 8, system: true },
+      { name: 'Entrada',         icon: 'door_open',          order: 0 },
+      { name: 'Ato Penitencial', icon: 'self_improvement',   order: 1 },
+      { name: 'Glória',          icon: 'auto_awesome',       order: 2 },
+      { name: 'Aclamação',       icon: 'menu_book',          order: 3 },
+      { name: 'Ofertório',       icon: 'redeem',             order: 4 },
+      { name: 'Comunhão',        icon: 'bakery_dining',      order: 5 },
+      { name: 'Pós-Comunhão',    icon: 'volunteer_activism', order: 6 },
+      { name: 'Canto Final',     icon: 'waving_hand',        order: 7 },
+      { name: 'Especiais',       icon: 'star',               order: 8 },
     ];
 
     const categoriesCol = collection(

@@ -4,6 +4,7 @@ import {
   CollectionReference,
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -64,15 +65,6 @@ export class CategoryService {
     return updateDoc(doc(this.db.firestoreInstance, `users/${uid}/categories/${id}`), changes);
   }
 
-  async swapOrder(idA: string, orderA: number, idB: string, orderB: number) {
-    const uid = this.auth.uid();
-    if (!uid) throw new Error('Não autenticado');
-    const batch = writeBatch(this.db.firestoreInstance);
-    batch.update(doc(this.db.firestoreInstance, `users/${uid}/categories/${idA}`), { order: orderB });
-    batch.update(doc(this.db.firestoreInstance, `users/${uid}/categories/${idB}`), { order: orderA });
-    return batch.commit();
-  }
-
   async reorder(cats: Category[]) {
     const uid = this.auth.uid();
     if (!uid) throw new Error('Não autenticado');
@@ -92,9 +84,10 @@ export class CategoryService {
         where('categoryId', '==', id),
       ),
     );
-    const batch = writeBatch(this.db.firestoreInstance);
-    songsSnap.docs.forEach((d) => batch.delete(d.ref));
-    batch.delete(doc(this.db.firestoreInstance, `users/${uid}/categories/${id}`));
-    return batch.commit();
+    if (songsSnap.size > 0) {
+      const n = songsSnap.size;
+      throw new Error(`Não é possível excluir: existem ${n} música${n === 1 ? '' : 's'} nesta categoria.`);
+    }
+    return deleteDoc(doc(this.db.firestoreInstance, `users/${uid}/categories/${id}`));
   }
 }

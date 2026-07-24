@@ -44,20 +44,7 @@
     </div>
     @if (editingId() === cat.id) {
       <div class="edit-form">
-        <input type="text" placeholder="Nome da categoria"
-               [value]="editName()" (input)="editName.set($any($event.target).value)"
-               (keyup.enter)="saveEdit()" />
-        <div class="icon-picker">
-          @for (ic of iconOptions; track ic) {
-            <button class="icon-opt" [class.sel]="editIcon() === ic" (click)="editIcon.set(ic)" [attr.aria-label]="ic">
-              <app-icon [name]="ic" [size]="22" />
-            </button>
-          }
-        </div>
-        <div class="form-actions">
-          <button class="btn btn-ghost" (click)="cancelEdit()">Cancelar</button>
-          <button class="btn btn-primary" (click)="saveEdit()">Salvar</button>
-        </div>
+        <app-category-form [initial]="cat" (save)="saveEdit($event)" (cancel)="cancelEdit()" />
       </div>
     }
   }
@@ -66,20 +53,7 @@
 @if (role.isMusico()) {
   @if (adding()) {
     <div class="add-form">
-      <input type="text" placeholder="Nome da categoria"
-             [value]="newName()" (input)="newName.set($any($event.target).value)"
-             (keyup.enter)="saveCategory()" />
-      <div class="icon-picker">
-        @for (ic of iconOptions; track ic) {
-          <button class="icon-opt" [class.sel]="newIcon() === ic" (click)="newIcon.set(ic)" [attr.aria-label]="ic">
-            <app-icon [name]="ic" [size]="22" />
-          </button>
-        }
-      </div>
-      <div class="form-actions">
-        <button class="btn btn-ghost" (click)="adding.set(false)">Cancelar</button>
-        <button class="btn btn-primary" (click)="saveCategory()">Salvar</button>
-      </div>
+      <app-category-form (save)="addCategory($event)" (cancel)="adding.set(false)" />
     </div>
   } @else {
     <button class="add-cat" (click)="adding.set(true)">

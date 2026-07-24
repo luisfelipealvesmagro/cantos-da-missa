@@ -8,12 +8,13 @@ import { BackupService } from '../../core/services/backup.service';
 import { SeedService } from '../../core/services/seed.service';
 import { RoleService } from '../../core/services/role.service';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { CategoryFormComponent } from './category-form/category-form.component';
 import { Category } from '../../core/models/category.model';
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [RouterLink, IconComponent, CdkDropList, CdkDrag, CdkDragHandle],
+  imports: [RouterLink, IconComponent, CdkDropList, CdkDrag, CdkDragHandle, CategoryFormComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss',
@@ -38,40 +39,21 @@ export class CategoriesComponent implements OnInit {
 
   manage = signal(false);
   adding = signal(false);
-  newName = signal('');
-  newIcon = signal('music_note');
-  iconOptions = [
-    'music_note', 'chalice', 'church', 'star', 'favorite',
-    'self_improvement', 'auto_awesome', 'menu_book', 'redeem', 'bakery_dining',
-    'waving_hand', 'celebration', 'spa',
-    // litúrgicos adicionais
-    'crown', 'water_drop', 'flare', 'wb_sunny', 'brightness_5',
-    'local_fire_department', 'emoji_nature', 'volunteer_activism', 'mode_of_travel',
-  ];
-
   editingId = signal<string | null>(null);
-  editName = signal('');
-  editIcon = signal('music_note');
 
-  async saveCategory() {
-    const name = this.newName().trim();
-    if (!name) return;
-    await this.categoryService.add(name, this.newIcon());
-    this.newName.set('');
-    this.newIcon.set('music_note');
+  async addCategory(data: { name: string; icon: string }) {
+    await this.categoryService.add(data.name, data.icon);
     this.adding.set(false);
   }
 
   startEdit(cat: Category) {
     this.editingId.set(cat.id!);
-    this.editName.set(cat.name);
-    this.editIcon.set(cat.icon);
   }
 
-  async saveEdit() {
-    const name = this.editName().trim();
-    if (!name || this.editingId() === null) return;
-    await this.categoryService.update(this.editingId()!, { name, icon: this.editIcon() });
+  async saveEdit(data: { name: string; icon: string }) {
+    const id = this.editingId();
+    if (!id) return;
+    await this.categoryService.update(id, data);
     this.editingId.set(null);
   }
 
@@ -84,9 +66,17 @@ export class CategoriesComponent implements OnInit {
   }
 
   async deleteCategory(id: string, name: string) {
-    if (confirm(`Excluir "${name}" e todas as suas cifras?`)) {
-      if (this.editingId() === id) this.editingId.set(null);
+    const count = this.counts()[id] ?? 0;
+    if (count > 0) {
+      alert(`Não é possível excluir: existem ${count} música${count === 1 ? '' : 's'} nesta categoria.`);
+      return;
+    }
+    if (!confirm(`Confirma excluir a categoria "${name}"?`)) return;
+    if (this.editingId() === id) this.editingId.set(null);
+    try {
       await this.categoryService.remove(id);
+    } catch (e) {
+      alert((e as Error).message);
     }
   }
 

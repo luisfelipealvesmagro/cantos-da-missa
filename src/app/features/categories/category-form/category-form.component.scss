@@ -1,0 +1,10 @@
+:host { display: grid; gap: 12px; }
+.form-error { margin: 0; font-size: 13px; color: var(--danger); }
+.icon-picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.icon-opt {
+  width: 44px; height: 44px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--surface); color: var(--text-muted);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.icon-opt.sel { border-color: var(--primary-2); color: var(--primary-2); background: var(--surface-2); }
+.form-actions { display: flex; justify-content: flex-end; gap: 8px; }
