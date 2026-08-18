@@ -81,7 +81,10 @@
       <ul class="cantores-list">
         @for (email of role.cantorEmails(); track email) {
           <li class="cantor-item">
-            <span class="cantor-email">{{ email }}</span>
+            <span class="cantor-info">
+              <span class="cantor-email">{{ email }}</span>
+              <span class="cantor-access">{{ lastAccessLabel(email) }}</span>
+            </span>
             <button class="icon-btn-sm" (click)="removeCantor(email)" aria-label="Remover cantor">
               <app-icon name="close" [size]="16" />
             </button>

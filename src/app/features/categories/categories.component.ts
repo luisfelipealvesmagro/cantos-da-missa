@@ -83,6 +83,13 @@ export class CategoriesComponent implements OnInit {
   // Gerenciamento de cantores (músico only)
   newCantorEmail = signal('');
   addingCantor = signal(false);
+  private cantorAccess = toSignal(this.role.cantorAccessLog$(), { initialValue: [] });
+
+  lastAccessLabel(email: string): string {
+    const entry = this.cantorAccess().find(a => a.id === email.toLowerCase());
+    if (!entry?.lastAccess) return 'nunca acessou';
+    return entry.lastAccess.toDate().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+  }
 
   async addCantor() {
     const email = this.newCantorEmail().trim();

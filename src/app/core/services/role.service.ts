@@ -1,7 +1,7 @@
 import { Injectable, computed, effect, inject } from '@angular/core';
-import { DocumentReference, Firestore, arrayRemove, arrayUnion, doc, docSnapshots, setDoc, updateDoc } from '@angular/fire/firestore';
+import { CollectionReference, DocumentReference, Firestore, Timestamp, arrayRemove, arrayUnion, collection, collectionData, deleteDoc, doc, docSnapshots, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { NEVER } from 'rxjs';
+import { NEVER, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
@@ -11,11 +11,17 @@ interface AppConfig {
   cantorEmails: string[];
 }
 
+interface CantorAccess {
+  id?: string;
+  lastAccess: Timestamp | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class RoleService {
   private firestore = inject(Firestore);
   private auth = inject(AuthService);
   private configRef = doc(this.firestore, 'app/config') as DocumentReference<AppConfig>;
+  private accessLogCol = collection(this.firestore, 'accessLog') as CollectionReference<CantorAccess>;
 
   // Músico é determinado pelo e-mail fixo — sem esperar nenhuma leitura do Firestore
   readonly isMusico = computed(() =>
@@ -72,6 +78,13 @@ export class RoleService {
         updateDoc(this.configRef, { musicoUid: uid }).catch(() => {});
       }
     });
+
+    // Cantor registra o próprio último acesso — única exceção a "cantor nunca escreve"
+    effect(() => {
+      const email = this.auth.email();
+      if (!email || !this.isCantor()) return;
+      setDoc(doc(this.accessLogCol, email.toLowerCase()), { lastAccess: serverTimestamp() }).catch(() => {});
+    });
   }
 
   async addCantorEmail(email: string) {
@@ -80,5 +93,11 @@ export class RoleService {
 
   async removeCantorEmail(email: string) {
     await updateDoc(this.configRef, { cantorEmails: arrayRemove(email) });
+    await deleteDoc(doc(this.accessLogCol, email.toLowerCase())).catch(() => {});
+  }
+
+  /** Último acesso de cada cantor — só o músico consegue ler (ver firestore.rules) */
+  cantorAccessLog$(): Observable<(CantorAccess & { id: string })[]> {
+    return collectionData(this.accessLogCol, { idField: 'id' }) as Observable<(CantorAccess & { id: string })[]>;
   }
 }

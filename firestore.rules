@@ -9,6 +9,16 @@ service cloud.firestore {
       allow write: if request.auth.token.email == 'luisfelipealvesm@gmail.com';
     }
 
+    // Último acesso de cada cantor (e-mail como ID do doc)
+    match /accessLog/{email} {
+      // Cantor grava só o próprio doc, só o campo lastAccess
+      allow write: if request.auth != null
+                   && request.auth.token.email == email
+                   && request.resource.data.keys().hasOnly(['lastAccess']);
+      // Só o músico lê e apaga (ao remover um cantor)
+      allow read, delete: if request.auth.token.email == 'luisfelipealvesm@gmail.com';
+    }
+
     // Dados do usuário (categorias, músicas, playlists)
     match /users/{uid}/{document=**} {
       // Dono: acesso completo
