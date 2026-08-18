@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ThemeService } from './core/services/theme.service';
 import { AuthService } from './core/services/auth.service';
 import { RoleService } from './core/services/role.service';
+import { UpdateService } from './core/services/update.service';
 import { IconComponent } from './shared/icon/icon.component';
 
 @Component({
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit {
   protected theme = inject(ThemeService);
   protected auth = inject(AuthService);
   protected role = inject(RoleService);
+  private update = inject(UpdateService);
   private router = inject(Router);
 
   constructor() {
@@ -41,5 +43,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.theme.init();
+    this.update.init();
   }
 }

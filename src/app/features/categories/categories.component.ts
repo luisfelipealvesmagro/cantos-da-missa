@@ -10,6 +10,7 @@ import { RoleService } from '../../core/services/role.service';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { CategoryFormComponent } from './category-form/category-form.component';
 import { Category } from '../../core/models/category.model';
+import { APP_VERSION } from '../../shared/utils/app-version';
 
 @Component({
   selector: 'app-categories',
@@ -25,6 +26,7 @@ export class CategoriesComponent implements OnInit {
   private backup = inject(BackupService);
   private seed = inject(SeedService);
   protected role = inject(RoleService);
+  protected version = APP_VERSION;
 
   ngOnInit() { this.seed.ensureSeed(); }
 

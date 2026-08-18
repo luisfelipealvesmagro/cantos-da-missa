@@ -62,7 +62,10 @@
   }
 }
 
-<p class="total-songs">{{ totalSongs() }} {{ totalSongs() === 1 ? 'música' : 'músicas' }} no total</p>
+<p class="total-songs">
+  {{ totalSongs() }} {{ totalSongs() === 1 ? 'música' : 'músicas' }} no total
+  <span class="version-tag">v{{ version }}</span>
+</p>
 
 @if (manage()) {
   <footer class="backup">
