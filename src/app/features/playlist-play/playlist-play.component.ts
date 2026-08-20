@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnDestroy, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlaylistService } from '../../core/services/playlist.service';
 import { SongService } from '../../core/services/song.service';
@@ -13,6 +13,10 @@ import { MassCompleteOverlayComponent } from '../../shared/mass-complete-overlay
 import { extractYoutubeId } from '../../shared/utils/youtube';
 import { Song } from '../../core/models/song.model';
 import { Playlist } from '../../core/models/playlist.model';
+
+const PEDAL_SCROLL_STEP = 120;
+const PEDAL_UP_KEYS = ['ArrowUp', 'ArrowLeft', 'PageUp'];
+const PEDAL_DOWN_KEYS = ['ArrowDown', 'ArrowRight', 'PageDown'];
 
 @Component({
   selector: 'app-playlist-play',
@@ -126,6 +130,20 @@ export class PlaylistPlayComponent implements OnDestroy {
     this.rafId = requestAnimationFrame(step);
   }
   private stopScroll() { this.scrolling.set(false); cancelAnimationFrame(this.rafId); }
+
+  @HostListener('window:keydown', ['$event'])
+  onPedalKey(event: KeyboardEvent) {
+    const target = event.target as HTMLElement;
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(target?.tagName)) return;
+
+    const isUp = PEDAL_UP_KEYS.includes(event.key);
+    const isDown = PEDAL_DOWN_KEYS.includes(event.key);
+    if (!isUp && !isDown) return;
+
+    event.preventDefault();
+    this.stopScroll();
+    window.scrollBy({ top: isUp ? -PEDAL_SCROLL_STEP : PEDAL_SCROLL_STEP, behavior: 'smooth' });
+  }
 
   back() { this.router.navigate(['/playlists']); }
 

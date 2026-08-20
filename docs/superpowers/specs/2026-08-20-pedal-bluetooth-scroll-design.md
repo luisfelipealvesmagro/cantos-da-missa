@@ -10,7 +10,7 @@ O pedal é um dispositivo Bluetooth HID: parea como teclado externo no sistema o
 
 ## Decisões
 
-- Escopo: apenas `PlaylistPlayComponent`. `song-view` e `song-list` ficam de fora por enquanto.
+- Escopo: `PlaylistPlayComponent` e `SongViewComponent` (mesma lógica duplicada nos dois, seguindo o padrão já existente de `scrolling`/`startScroll`/`stopScroll` duplicado entre eles). `song-list` fica de fora.
 - Comportamento: pedal **rola o texto da cifra aos poucos**, não troca de música. Cada aperto = um passo pequeno fixo, para o músico não se perder no texto.
 - Cobre marchas 1, 2 e 3 do pedal ao mesmo tempo (não é preciso escolher a marcha certa): `ArrowUp`/`ArrowLeft`/`PageUp` rolam para cima; `ArrowDown`/`ArrowRight`/`PageDown` rolam para baixo.
 - Se o auto-scroll (`toggleScroll`) estiver ativo, o pedal o interrompe antes de aplicar o passo manual — mesmo padrão já usado por `prev()`/`next()`.
@@ -18,7 +18,7 @@ O pedal é um dispositivo Bluetooth HID: parea como teclado externo no sistema o
 
 ## Implementação
 
-Tudo em `playlist-play.component.ts`, sem serviço novo:
+Mesmo trecho de código em `playlist-play.component.ts` e `song-view.component.ts`, sem serviço novo (não extraído para util compartilhado — YAGNI, só 2 usos):
 
 - Constante `PEDAL_SCROLL_STEP = 120` (px).
 - `@HostListener('window:keydown', ['$event'])` novo método `onPedalKey(event: KeyboardEvent)`:
@@ -45,7 +45,7 @@ Ao testar com o pedal físico depois de parear via Bluetooth do sistema, confirm
 
 ## Fora de escopo
 
-- `song-view` e `song-list` (navegação/rolagem fora de playlist).
+- `song-list` (rolagem da lista de músicas de uma categoria).
 - Troca de música via pedal (marcha 5, media prev/next) — pedido original mudou para rolagem de cifra, não troca de música.
 - Suporte a marchas 6/7 (swipe simulado) — não gera `keydown`, exigiria outra abordagem (touch events) e não foi pedido.
 - Preferência configurável de tamanho do passo de rolagem (fixo em 120px por decisão do usuário).
