@@ -44,13 +44,13 @@ export class PlaylistService {
     return snap.exists() ? { id: snap.id, ...(snap.data() as Omit<Playlist, 'id'>) } : undefined;
   }
 
-  async add(name: string): Promise<string> {
+  async add(name: string, description = ''): Promise<string> {
     const uid = this.auth.uid();
     if (!uid) throw new Error('Não autenticado');
     const now = Date.now();
     const ref = await addDoc(
       collection(this.db.firestoreInstance, `users/${uid}/playlists`) as CollectionReference<Omit<Playlist, 'id'>>,
-      { name: name.trim(), songIds: [], createdAt: now, updatedAt: now },
+      { name: name.trim(), description: description.trim(), songIds: [], createdAt: now, updatedAt: now },
     );
     return ref.id;
   }
@@ -63,7 +63,7 @@ export class PlaylistService {
     const now = Date.now();
     const ref = await addDoc(
       collection(this.db.firestoreInstance, `users/${uid}/playlists`) as CollectionReference<Omit<Playlist, 'id'>>,
-      { name: newName.trim(), songIds: [...source.songIds], createdAt: now, updatedAt: now },
+      { name: newName.trim(), description: source.description ?? '', songIds: [...source.songIds], createdAt: now, updatedAt: now },
     );
     return ref.id;
   }

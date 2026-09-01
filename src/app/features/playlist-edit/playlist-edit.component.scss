@@ -2,6 +2,7 @@
 .back { display: inline-flex; align-items: center; color: var(--text-muted); }
 
 .form { display: flex; flex-direction: column; gap: 24px; }
+.optional { font-weight: 400; color: var(--text-muted); }
 
 .section h3 {
   font-family: var(--font-display); font-size: 1.1rem; font-weight: 500;

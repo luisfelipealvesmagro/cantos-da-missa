@@ -9,6 +9,11 @@
            (input)="name.set($any($event.target).value)" />
   </label>
 
+  <label>Descrição <span class="optional">(opcional)</span>
+    <input type="text" placeholder="Ex.: 23º Domingo do Tempo Comum" [value]="description()"
+           (input)="description.set($any($event.target).value)" />
+  </label>
+
   <section class="section">
     <h3>Músicas na playlist <span class="badge">{{ selectedSongs().length }}</span></h3>
 

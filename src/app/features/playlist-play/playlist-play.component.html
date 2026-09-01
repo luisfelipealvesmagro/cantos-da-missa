@@ -10,11 +10,14 @@
     </button>
   }
 </div>
+@if (playlist()?.description) { <p class="pl-desc">{{ playlist()?.description }}</p> }
 
 @if (currentSong(); as song) {
   <div class="song-header">
-    <h2>{{ song.title }}</h2>
-    @if (song.author) { <span class="author">{{ song.author }}</span> }
+    <div class="titles">
+      <h2>{{ song.title }}</h2>
+      @if (song.author) { <span class="author">{{ song.author }}</span> }
+    </div>
     @if (hasVideo()) {
       <button class="video-btn" (click)="showVideo.set(true)" aria-label="Assistir vídeo"><app-icon name="smart_display" [size]="20" /></button>
     }

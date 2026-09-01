@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, OnDestroy, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnDestroy, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlaylistService } from '../../core/services/playlist.service';
 import { SongService } from '../../core/services/song.service';
@@ -65,6 +65,9 @@ export class PlaylistPlayComponent implements OnDestroy {
   private acc = 0;
 
   constructor() {
+    effect(() => {
+      document.body.style.overflow = this.showSongPicker() ? 'hidden' : '';
+    });
     this.wakeLock.acquire();
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     this.playlistService.get(id).then(async (pl) => {
@@ -153,5 +156,5 @@ export class PlaylistPlayComponent implements OnDestroy {
     this.router.navigate(['/playlists']);
   }
 
-  ngOnDestroy() { this.stopScroll(); this.wakeLock.release(); }
+  ngOnDestroy() { this.stopScroll(); this.wakeLock.release(); document.body.style.overflow = ''; }
 }

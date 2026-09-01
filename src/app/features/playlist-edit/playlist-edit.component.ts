@@ -33,6 +33,7 @@ export class PlaylistEditComponent {
 
   editingId = signal<string | null>(null);
   name = signal('');
+  description = signal('');
   songIds = signal<string[]>([]);
   query = signal('');
 
@@ -59,6 +60,7 @@ export class PlaylistEditComponent {
         if (!pl) return;
         this.editingId.set(pl.id!);
         this.name.set(pl.name);
+        this.description.set(pl.description ?? '');
         this.songIds.set([...pl.songIds]);
       });
     }
@@ -83,12 +85,13 @@ export class PlaylistEditComponent {
   async save() {
     const name = this.name().trim();
     if (!name) return;
+    const description = this.description().trim();
     if (this.isNew()) {
-      const id = await this.playlistService.add(name);
+      const id = await this.playlistService.add(name, description);
       await this.playlistService.update(id, { songIds: this.songIds() });
       this.router.navigate(['/playlists']);
     } else {
-      await this.playlistService.update(this.editingId()!, { name, songIds: this.songIds() });
+      await this.playlistService.update(this.editingId()!, { name, description, songIds: this.songIds() });
       this.router.navigate(['/playlists']);
     }
   }
