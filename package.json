@@ -1,6 +1,6 @@
 {
   "name": "cantos-da-missa",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "scripts": {
     "ng": "ng",
     "start": "ng s --open --port 5000",
