@@ -12,11 +12,21 @@
   }
 </div>
 
+@if (playlists().length) {
+  <div class="search">
+    <app-icon name="search" [size]="20" />
+    <input type="text" placeholder="Buscar por nome ou descrição…"
+           [value]="query()" (input)="query.set($any($event.target).value)" />
+  </div>
+}
+
 @if (playlists().length === 0) {
   <p class="empty">Nenhuma playlist ainda. Crie a primeira para facilitar na hora da missa.</p>
+} @else if (filtered().length === 0) {
+  <p class="empty">Nenhuma playlist encontrada.</p>
 } @else {
   <ul class="list">
-    @for (pl of playlists(); track pl.id) {
+    @for (pl of filtered(); track pl.id) {
       <li class="card">
         @if (pl.description) { <span class="description">{{ pl.description }}</span> }
         <div class="row">

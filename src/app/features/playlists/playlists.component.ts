@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PlaylistService } from '../../core/services/playlist.service';
 import { RoleService } from '../../core/services/role.service';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { normalize } from '../../shared/utils/normalize';
 
 @Component({
   selector: 'app-playlists',
@@ -19,6 +20,15 @@ export class PlaylistsComponent {
   protected role = inject(RoleService);
 
   playlists = toSignal(this.playlistService.all$(), { initialValue: [] });
+
+  query = signal('');
+  filtered = computed(() => {
+    const q = normalize(this.query().trim());
+    const list = this.playlists();
+    if (!q) return list;
+    return list.filter((pl) =>
+      normalize(pl.name).includes(q) || normalize(pl.description ?? '').includes(q));
+  });
 
   async remove(id: string, name: string) {
     if (confirm(`Excluir a playlist "${name}"?`)) {
