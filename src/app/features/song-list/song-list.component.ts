@@ -31,7 +31,7 @@ export class SongListComponent {
     { initialValue: undefined }
   );
 
-  private songs = toSignal(
+  protected songs = toSignal(
     this.route.paramMap.pipe(switchMap((p) => this.songService.byCategory$(p.get('id') ?? ''))),
     { initialValue: [] }
   );

@@ -1,6 +1,20 @@
 .head { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
 .back { display: inline-flex; color: var(--text-muted); }
 h2 { font-size: 24px; }
+.total {
+  margin-left: auto; flex-shrink: 0;
+  min-width: 24px; height: 24px; padding: 0 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 12px; background: var(--surface-2);
+  font-size: 13px; font-weight: 600; color: var(--text-muted);
+}
+.quick-add {
+  flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1px dashed var(--primary-2); color: var(--primary-2);
+  &.only { margin-left: auto; }
+}
 
 .search {
   display: flex; align-items: center; gap: 8px;

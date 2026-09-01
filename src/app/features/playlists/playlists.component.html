@@ -1,6 +1,15 @@
 <div class="head">
   <a routerLink="/" class="back" aria-label="Voltar"><app-icon name="arrow_back" [size]="24" /></a>
   <h2>Playlists</h2>
+  @if (playlists().length) {
+    <span class="total">{{ playlists().length }}</span>
+  }
+  @if (role.isMusico()) {
+    <a class="quick-add" routerLink="/playlists/nova" aria-label="Nova playlist"
+       [class.only]="!playlists().length">
+      <app-icon name="add" [size]="16" />
+    </a>
+  }
 </div>
 
 @if (playlists().length === 0) {

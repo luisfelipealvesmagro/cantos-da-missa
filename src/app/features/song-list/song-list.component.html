@@ -1,6 +1,15 @@
 <div class="head">
   <a routerLink="/" class="back" aria-label="Voltar"><app-icon name="arrow_back" [size]="24" /></a>
   <h2>{{ category()?.name ?? 'Categoria' }}</h2>
+  @if (songs().length) {
+    <span class="total">{{ songs().length }}</span>
+  }
+  @if (role.isMusico()) {
+    <a class="quick-add" [routerLink]="['/musica/nova', categoryId()]" aria-label="Cadastrar cifra"
+       [class.only]="!songs().length">
+      <app-icon name="add" [size]="16" />
+    </a>
+  }
 </div>
 
 <div class="search">
