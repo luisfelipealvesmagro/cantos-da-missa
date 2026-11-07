@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, HostListener, inject, OnDestroy, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { SongService } from '../../core/services/song.service';
+import { PlaylistService } from '../../core/services/playlist.service';
 import { TransposeService } from '../../core/services/transpose.service';
 import { RoleService } from '../../core/services/role.service';
 import { PreferencesService } from '../../core/services/preferences.service';
@@ -9,6 +11,7 @@ import { ChordSheetComponent } from '../../shared/chord-sheet/chord-sheet.compon
 import { IconComponent } from '../../shared/icon/icon.component';
 import { VideoPlayerComponent } from '../../shared/video-player/video-player.component';
 import { extractYoutubeId } from '../../shared/utils/youtube';
+import { formatUsage } from '../../shared/utils/song-usage';
 import { Song } from '../../core/models/song.model';
 
 const PEDAL_SCROLL_STEP = 120;
@@ -31,6 +34,7 @@ export class SongViewComponent implements OnDestroy {
   protected role = inject(RoleService);
   protected prefs = inject(PreferencesService);
   private wakeLock = inject(WakeLockService);
+  private playlistService = inject(PlaylistService);
 
   song = signal<Song | undefined>(undefined);
   steps = signal(0);
@@ -44,6 +48,13 @@ export class SongViewComponent implements OnDestroy {
     return s ? this.tp.transposeChord(s.originalKey, this.steps()) : '';
   });
   hasVideo = computed(() => !!extractYoutubeId(this.song()?.videoUrl ?? ''));
+
+  private usage = toSignal(this.playlistService.usage$, { initialValue: new Map<string, number>() });
+  usageLabel = computed(() => {
+    const id = this.song()?.id;
+    const count = id ? this.usage().get(id) ?? 0 : 0;
+    return count === 0 ? 'Nunca tocada em missa' : `Tocada em ${formatUsage(count)}`;
+  });
 
   scrolling = signal(false);
   speed = signal(3);

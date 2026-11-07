@@ -12,10 +12,11 @@ import {
   query,
   updateDoc,
 } from '@angular/fire/firestore';
-import { Observable, of, switchMap } from 'rxjs';
+import { Observable, map, of, shareReplay, switchMap } from 'rxjs';
 import { AuthService } from './auth.service';
 import { DbService } from './db.service';
 import { Playlist } from '../models/playlist.model';
+import { countSongUsage } from '../../shared/utils/song-usage';
 
 @Injectable({ providedIn: 'root' })
 export class PlaylistService {
@@ -36,6 +37,12 @@ export class PlaylistService {
       }),
     );
   }
+
+  /** Quantidade de playlists (missas) em que cada música aparece, por songId. */
+  readonly usage$: Observable<Map<string, number>> = this.all$().pipe(
+    map(countSongUsage),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
 
   async get(id: string): Promise<Playlist | undefined> {
     const uid = this.db.uid;

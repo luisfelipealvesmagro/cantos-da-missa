@@ -4,6 +4,7 @@
     <div class="titles">
       <h2>{{ s.title }}</h2>
       @if (s.author) { <span class="author">{{ s.author }}</span> }
+      <span class="usage">{{ usageLabel() }}</span>
     </div>
     @if (hasVideo()) {
       <button class="video-btn" (click)="showVideo.set(true)" aria-label="Assistir vídeo"><app-icon name="smart_display" [size]="22" /></button>
